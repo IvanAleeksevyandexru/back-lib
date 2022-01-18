@@ -12,6 +12,7 @@
         <module>pgu-common</module>
         <module>pgu-clients</module>
         <module>pgu-dto</module>
+        <module>components</module>
     </modules>
 
     <properties>
