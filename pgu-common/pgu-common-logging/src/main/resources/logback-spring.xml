@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <springProperty name="LOGGING_JSON" source="logging.json" defaultValue="false" />
+    <springProperty name="SPRING_APPLICATION_NAME" source="spring.application.name" />
+    <springProperty name="SPRING_APPLICATION_ENV" source="spring.application.env" />
+
+    <logger name="ru.gosuslugi.pgu" level="DEBUG" />
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
+
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <fieldNames>
+                <levelValue>[ignore]</levelValue>
+                <level>log.level</level>
+                <logger>log.logger</logger>
+            </fieldNames>
+            <excludeMdcKeyName>spanExportable</excludeMdcKeyName>
+            <excludeMdcKeyName>X-Span-Export</excludeMdcKeyName>
+            <excludeMdcKeyName>X-B3-SpanId</excludeMdcKeyName>
+            <excludeMdcKeyName>X-B3-TraceId</excludeMdcKeyName>
+            <customFields>{"service":"${SPRING_APPLICATION_NAME}","env":"${SPRING_APPLICATION_ENV}"}</customFields>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <if condition='property("LOGGING_JSON").equalsIgnoreCase("true")'>
+            <then>
+                <appender-ref ref="JSON" />
+            </then>
+            <else>
+                <appender-ref ref="CONSOLE" />
+            </else>
+        </if>
+    </root>
+
+</configuration>

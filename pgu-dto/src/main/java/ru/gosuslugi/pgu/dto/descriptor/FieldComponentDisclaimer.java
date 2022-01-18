@@ -1,0 +1,14 @@
+package ru.gosuslugi.pgu.dto.descriptor;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class FieldComponentDisclaimer {
+    String type;
+    String title;
+    String description;
+}

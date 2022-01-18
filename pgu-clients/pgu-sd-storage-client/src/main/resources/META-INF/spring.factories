@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  ru.gosuslugi.pgu.sd.storage.config.ServiceDescriptorStorageAutoConfiguration

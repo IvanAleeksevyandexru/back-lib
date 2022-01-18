@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  ru.gosuslugi.pgu.common.versioning.config.VersioningAutoConfiguration

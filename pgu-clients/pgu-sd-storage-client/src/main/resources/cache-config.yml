@@ -1,0 +1,5 @@
+
+# Service Descriptor Cache
+spring.cache:
+  cache-names: cacheServiceDescriptor
+  caffeine.spec: expireAfterWrite=600s

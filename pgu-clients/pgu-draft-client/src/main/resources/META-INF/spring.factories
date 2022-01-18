@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  ru.gosuslugi.pgu.draft.config.DraftClientAutoConfiguration,\
+  ru.gosuslugi.pgu.draft.config.OrderStoreClientAutoConfiguration

@@ -1,0 +1,7 @@
+management:
+  endpoints.web.exposure.include: info, health, prometheus
+  metrics:
+    enable.tomcat: false
+    web:
+      server.request.autotime.percentiles: [0.99, 0.97, 0.75]
+      client.request.autotime.percentiles: [0.99, 0.97, 0.75]

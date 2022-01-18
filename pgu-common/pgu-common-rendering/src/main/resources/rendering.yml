@@ -1,0 +1,8 @@
+template-service:
+    refresh-rate: 60000
+
+velocity:
+  resource-loader: FILE
+  resource-loader-file-cache: false
+  resource-loader-file-modification-check-interval: 0
+  runtime.log.logsystem.class: org.apache.velocity.runtime.log.NullLogChute

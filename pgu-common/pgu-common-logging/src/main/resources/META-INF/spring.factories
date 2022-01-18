@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  ru.gosuslugi.pgu.common.logging.config.LoggingAutoConfiguration,\
+  ru.gosuslugi.pgu.common.logging.config.ControllerFilterConfiguration

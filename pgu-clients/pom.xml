@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <artifactId>epgu2-sf-lib-parent</artifactId>
+        <groupId>ru.gosuslugi</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.gosuslugi.pgu</groupId>
+    <artifactId>pgu-clients</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+
+    <modules>
+        <module>pgu-terrabyte-client</module>
+        <module>pgu-draft-client</module>
+        <module>pgu-sd-storage-client</module>
+        <module>pgu-draft-converter-client</module>
+    </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <url>http://nexus.gosuslugi.local/content/repositories/epgu2/</url>
+        </repository>
+    </distributionManagement>
+</project>

@@ -1,0 +1,9 @@
+spring:
+  main:
+    banner-mode: log
+  kafka:
+    # Адрес для подключения к кафке для трейсинга в Zipkin
+    bootstrap-servers: localhost:19092
+  zipkin:
+    enabled: false
+    sender.type: KAFKA
