@@ -161,5 +161,10 @@
             <url>http://nexus.gosuslugi.local/content/groups/public/</url>
         </repository>
     </repositories>
-
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <url>http://nexus.gosuslugi.local/content/repositories/epgu2/</url>
+        </repository>
+    </distributionManagement>
 </project>
