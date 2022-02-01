@@ -37,4 +37,4 @@ public enum ApplicantRole {
      */
     NotParticipant
 
-    }
+}

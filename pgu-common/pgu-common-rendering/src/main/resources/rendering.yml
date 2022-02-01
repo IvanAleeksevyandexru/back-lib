@@ -1,5 +1,5 @@
 template-service:
-    refresh-rate: 60000
+  refresh-rate: 60000
 
 velocity:
   resource-loader: FILE

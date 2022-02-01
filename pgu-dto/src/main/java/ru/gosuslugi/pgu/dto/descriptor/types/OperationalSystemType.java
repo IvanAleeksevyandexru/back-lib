@@ -11,23 +11,23 @@ public enum OperationalSystemType {
     /**
      * для iOS-устройств
      */
-	iOS("iOS"),
+    iOS("iOS"),
     /**
      * для Harmony-устройств
      */
-	Harmony("Harmony"),
+    Harmony("Harmony"),
     /**
      * для Desktop-устройств
      */
-	Desktop("Desktop"),
+    Desktop("Desktop"),
     /**
      * в случае отличия системы пользователя от прописанных выше
      */
-	NotDetermined("NotDetermined"),
+    NotDetermined("NotDetermined"),
     /**
      * в случае ошибки со стороны клиента в момент определения системы
      */
-	Error("Error");
+    Error("Error");
 
     final String type;
     OperationalSystemType(String type) {

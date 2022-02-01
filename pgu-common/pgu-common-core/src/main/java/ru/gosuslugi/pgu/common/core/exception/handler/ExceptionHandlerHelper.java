@@ -23,15 +23,15 @@ public class ExceptionHandlerHelper {
     private final SpanService spanService;
 
     public <R extends ErrorMessage> ResponseEntity<R> handle(
-        Exception ex,
-        ErrorMessageFactory<R> errorMessageFactory,
-        boolean withTraceId
+            Exception ex,
+            ErrorMessageFactory<R> errorMessageFactory,
+            boolean withTraceId
     ) {
 
         ResponseStatus responseStatus = extractResponseStatus(ex);
         final var err = errorMessageFactory.createErrorMessage(
-            !isEmpty(responseStatus.reason()) ? responseStatus.reason() : responseStatus.value().getReasonPhrase(),
-            responseStatus.value().name()
+                !isEmpty(responseStatus.reason()) ? responseStatus.reason() : responseStatus.value().getReasonPhrase(),
+                responseStatus.value().name()
         );
 
         if (!(ex instanceof PguQuietException)) {

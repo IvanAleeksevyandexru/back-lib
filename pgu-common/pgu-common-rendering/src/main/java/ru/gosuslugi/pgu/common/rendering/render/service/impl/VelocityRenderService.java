@@ -97,7 +97,7 @@ public class VelocityRenderService implements RenderService {
     }
 
     private String renderTemplate(RenderRequest renderRequest, Template template,
-            VelocityContext context) {
+                                  VelocityContext context) {
         String result = "";
         log.debug("Контекст, используемый для отрисовки шаблона: {}",
                 JsonProcessingUtil.toJson(context));

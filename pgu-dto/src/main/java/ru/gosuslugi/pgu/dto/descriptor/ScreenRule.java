@@ -6,8 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 @Data
 @Builder
@@ -19,7 +18,7 @@ public class ScreenRule {
     /**
      * Conditions to be met (in case of several behaves as &&)
      */
-    private Set<RuleCondition> conditions = new HashSet<>();
+    private LinkedHashSet<RuleCondition> conditions = new LinkedHashSet<>();
 
     /**
      * Screen id to display

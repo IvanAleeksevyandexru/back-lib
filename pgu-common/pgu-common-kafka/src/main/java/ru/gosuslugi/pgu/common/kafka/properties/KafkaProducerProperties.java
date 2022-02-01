@@ -1,45 +1,29 @@
 package ru.gosuslugi.pgu.common.kafka.properties;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.NotEmpty;
+import lombok.Data;
+import org.apache.kafka.clients.admin.NewTopic;
 
 /**
  * Поля конфигурация для отправки kafka сообщений
  */
-@Getter
-@Setter
-@ToString
-@Validated
+@Data
 public class KafkaProducerProperties {
 
-    private boolean enabled = false;
+    private String topic;
 
-    private TopicProperties targetTopic;
+    /**
+     * Number of topic partitions
+     */
+    private int partitions = 1;
 
-    @Getter
-    @Setter
-    @ToString
-    @Validated
-    public static class TopicProperties {
+    /**
+     * Topic replication factor
+     */
+    private short replicationFactor = 1;
 
-        /**
-         * Name of topic
-         */
-        @NotEmpty
-        private String topicName;
 
-        /**
-         * Number of topic partitions
-         */
-        private int topicPartitions = 1;
-
-        /**
-         * Topic replication factor
-         */
-        private short topicReplicationFactor = 1;
+    public NewTopic toNewTopic() {
+        return new NewTopic(topic, partitions, replicationFactor);
     }
+
 }

@@ -1,8 +1,7 @@
 package ru.gosuslugi.pgu.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,17 +9,19 @@ import lombok.Data;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-@ApiModel(description = "Дополнительная информация для инициализации услуги")
+@Schema(description = "Дополнительная информация для инициализации услуги")
 public class InitServiceDto {
-    @ApiModelProperty(notes = "Id цели услуги")
+
+    @Schema(description = "Фактическая цель услуги\n\n" +
+            "Например, используется в услуге по уходу за недееспособными")
     private String targetId;
 
-    @ApiModelProperty(notes = "Id заявления находящегося в черновиках. Если указан - загрузится заявление из черновика", allowEmptyValue = true)
+    @Schema(description = "Id заявления находящегося в черновиках. Если указан - загрузится заявление из черновика")
     private String orderId;
 
-    @ApiModelProperty(notes = "DTO с информацией о региональном ведомстве")
+    @Schema(description = "DTO с информацией о региональном ведомстве")
     ServiceInfoDto serviceInfo = new ServiceInfoDto();
 
-    @ApiModelProperty(notes = "Идентификатор сообщения ГЭПС. Если указан, то компонент ГЭПС сможет найти нужное сообщение", allowEmptyValue = true)
+    @Schema(description = "Идентификатор сообщения ГЭПС. Если указан, то компонент ГЭПС сможет найти нужное сообщение")
     private Long gepsId;
 }

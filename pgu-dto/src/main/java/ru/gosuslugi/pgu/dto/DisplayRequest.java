@@ -43,6 +43,8 @@ public class DisplayRequest {
     /** Список инфорационных компонентов, выводятся, как правило, под заголовком */
     private List<FieldComponent> infoComponents;
 
+    private List<FieldComponent> logicAfterValidationComponents;
+
     @JsonIgnore
     private boolean isTerminal;
     @JsonIgnore
@@ -81,9 +83,9 @@ public class DisplayRequest {
         this.isTerminal = Boolean.TRUE.equals(screenDescriptor.getIsTerminal());
         this.needToUpdateAdditionalParameters = Boolean.TRUE.equals(screenDescriptor.getNeedToUpdateAdditionalParameters());
         // по умолчанию true
-        this.isAccepted = screenDescriptor.getIsAccepted() == null ? true : screenDescriptor.getIsAccepted();
+        this.isAccepted = screenDescriptor.getIsAccepted() == null || screenDescriptor.getIsAccepted();
         // default false
-        this.notSendToSp = screenDescriptor.getNotSendToSp() == null ? false : screenDescriptor.getNotSendToSp();
+        this.notSendToSp = screenDescriptor.getNotSendToSp() != null && screenDescriptor.getNotSendToSp();
         this.forceDeliriumCall = screenDescriptor.getForceDeliriumCall() != null && screenDescriptor.getForceDeliriumCall();
 
         this.cssClass = screenDescriptor.getCssClass();
@@ -107,6 +109,13 @@ public class DisplayRequest {
             this.infoComponents =  components
                     .stream()
                     .filter(c -> screenDescriptor.getInfoComponents().contains(c.getId()))
+                    .collect(Collectors.toList());
+            this.logicAfterValidationComponents =  components
+                    .stream()
+                    .filter(c -> screenDescriptor.getLogicAfterValidationComponentIds().contains(c.getId())
+                            && !screenDescriptor.getInfoComponents().contains(c.getId())
+                            && !screenDescriptor.getComponentIds().contains(c.getId())
+                    )
                     .collect(Collectors.toList());
         }
     }

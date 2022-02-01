@@ -68,10 +68,10 @@ public class UserOrgData {
      */
     public String getVerifiedContactValue(String esiaContactTypeCode) {
         return  contacts
-            .stream()
-            .filter(contact -> Objects.equals(contact.getType(), esiaContactTypeCode) && Objects.equals(contact.getVrfStu(), VERIFIED_ATTR))
-            .findFirst()
-            .map(EsiaContact::getValue)
-            .orElse(null);
+                .stream()
+                .filter(contact -> Objects.equals(contact.getType(), esiaContactTypeCode) && Objects.equals(contact.getVrfStu(), VERIFIED_ATTR))
+                .findFirst()
+                .map(EsiaContact::getValue)
+                .orElse(null);
     }
 }

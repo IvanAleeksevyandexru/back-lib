@@ -1,4 +1,4 @@
-package ru.gosuslugi.pgu.common.core.exception;
+package ru.gosuslugi.pgu.ratelimit.client.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

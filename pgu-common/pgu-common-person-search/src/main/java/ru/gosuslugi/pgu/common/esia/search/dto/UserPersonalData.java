@@ -133,9 +133,9 @@ public class UserPersonalData {
     public String getVerifiedPhoneNumber(){
         return Optional.ofNullable(contacts)
                 .flatMap(list -> list.stream()
-                .filter(c ->
-                        (Objects.equals(c.getType(), EsiaContact.Type.MOBILE_PHONE.getCode()))
-                        && Objects.equals(c.getVrfStu(), "VERIFIED"))
+                        .filter(c ->
+                                (Objects.equals(c.getType(), EsiaContact.Type.MOBILE_PHONE.getCode()))
+                                        && Objects.equals(c.getVrfStu(), "VERIFIED"))
                         .findAny())
                 .map(EsiaContact::getValue).orElse(null);
     }
@@ -147,5 +147,12 @@ public class UserPersonalData {
         arr[0] = Long.valueOf(userId).byteValue();
         Random random = new SecureRandom(arr);
         return random.longs(1, min, max).findFirst().getAsLong();
+    }
+
+    public Object getChief() {
+        if (Objects.nonNull(currentRole) && Objects.nonNull(currentRole.getChief())) {
+            return currentRole.getChief();
+        }
+        return Objects.nonNull(person) ? person.isChief() : null;
     }
 }

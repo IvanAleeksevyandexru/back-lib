@@ -39,11 +39,11 @@ public class DraftClientImpl implements DraftClient {
         requireNonNull(userId, "userId is empty");
         try {
             ResponseEntity<DraftHolderDto> entity = restTemplate.exchange(
-                properties.getUrl() + "/internal/api/drafts/v3/{id}",
-                HttpMethod.GET,
-                new HttpEntity<>(tokenToHeaders(userIdToToken(userId, orgId))),
-                DraftHolderDto.class,
-                orderId
+                    properties.getUrl() + "/internal/api/drafts/v3/{id}",
+                    HttpMethod.GET,
+                    new HttpEntity<>(tokenToHeaders(userIdToToken(userId, orgId))),
+                    DraftHolderDto.class,
+                    orderId
             );
             if (entity.getBody() != null) {
                 checkDraftOwner(entity.getBody(), orderId, userId, orgId);
@@ -72,11 +72,11 @@ public class DraftClientImpl implements DraftClient {
         saveDraftDto.setOrderTtlInSec(Optional.ofNullable(orderTtl).map(DraftClientImpl::toSecondsFromDays).orElse(null));
         try {
             ResponseEntity<DraftHolderDto> entity = restTemplate.exchange(
-                properties.getUrl() + "/internal/api/drafts/v3/{id}",
-                HttpMethod.PUT,
-                new HttpEntity<>(saveDraftDto, tokenToHeaders(userIdToToken(userId, orgId))),
-                DraftHolderDto.class,
-                scenario.getOrderId()
+                    properties.getUrl() + "/internal/api/drafts/v3/{id}",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(saveDraftDto, tokenToHeaders(userIdToToken(userId, orgId))),
+                    DraftHolderDto.class,
+                    scenario.getOrderId()
             );
             return entity.getBody();
         } catch (PguException e) {
@@ -97,15 +97,15 @@ public class DraftClientImpl implements DraftClient {
         requireNonNull(userId, "userId is empty");
         try {
             restTemplate.exchange(
-                properties.getUrl() + "/internal/api/drafts/v3/{id}",
-                HttpMethod.DELETE,
-                new HttpEntity<>(null, tokenToHeaders(userIdToToken(userId, null))),
-                Void.class,
-                orderId
+                    properties.getUrl() + "/internal/api/drafts/v3/{id}",
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(null, tokenToHeaders(userIdToToken(userId, null))),
+                    Void.class,
+                    orderId
             );
         } catch (RestClientException e) {
             throw new ExternalServiceException("Draft Service Client: Error on delete draft by orderId: " + orderId
-                + "; " + e.getMessage(), e);
+                    + "; " + e.getMessage(), e);
         }
     }
 

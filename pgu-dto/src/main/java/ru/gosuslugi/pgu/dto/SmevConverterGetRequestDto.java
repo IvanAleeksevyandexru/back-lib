@@ -9,12 +9,12 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Schema(description = "Запрос в барбарбок для получения json указанного шаблона для услуги")
-public class SmevConverterRequestDto {
+public class SmevConverterGetRequestDto {
 
     @JsonCreator
-    public SmevConverterRequestDto(@JsonProperty("data") String data,
-                                   @JsonProperty("serviceId") String serviceId,
-                                   @JsonProperty("templateName") String templateName) {
+    public SmevConverterGetRequestDto(@JsonProperty("data") String data,
+                                      @JsonProperty("serviceId") String serviceId,
+                                      @JsonProperty("templateName") String templateName) {
         this.data = data;
         this.serviceId = serviceId;
         this.templateName = templateName;

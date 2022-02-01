@@ -159,7 +159,7 @@ public class DateServiceTest {
 
     @Test(dataProvider = "patternFormatCases")
     public void shouldFormatWithCustomPatternProperly(String input, String pattern,
-            String expected) {
+                                                      String expected) {
         // given
         // when
         String actual = SUT.format(pattern, input);

@@ -45,7 +45,7 @@ public class RestResponseErrorHandler implements ResponseErrorHandler {
         final String body = IOUtils.toString(response.getBody(), StandardCharsets.UTF_8);
         ErrorMessage errorBody = retrieveErrorMessage(body);
         final String message = String.format("Response code: %s %s. Body: [%s], url: [%s], method: [%s]",
-            status.value(), status.getReasonPhrase(), body, url, method);
+                status.value(), status.getReasonPhrase(), body, url, method);
 
         if (status == HttpStatus.NOT_FOUND) {
             throw new EntityNotFoundException(errorBody, "External entity not found. " + message);

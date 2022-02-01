@@ -50,7 +50,7 @@ public class VelocityConfig {
      */
     @Bean
     public VelocityEngine velocityEngine(VelocityProperties velocityProps,
-            TemplateServiceProperties templateServiceProps) {
+                                         TemplateServiceProperties templateServiceProps) {
         VelocityEngine engine = new VelocityEngine();
         engine.setProperty("runtime.log.logsystem.log4j.logger", "root");
         if (VelocityProperties.ResourceLoader.FILE.equals(velocityProps.getResourceLoader())) {

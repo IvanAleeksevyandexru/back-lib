@@ -21,6 +21,8 @@
         <module>pgu-draft-client</module>
         <module>pgu-sd-storage-client</module>
         <module>pgu-draft-converter-client</module>
+        <module>pgu-sp-adapter-client</module>
+        <module>pgu-ratelimit-client</module>
     </modules>
 
     <distributionManagement>

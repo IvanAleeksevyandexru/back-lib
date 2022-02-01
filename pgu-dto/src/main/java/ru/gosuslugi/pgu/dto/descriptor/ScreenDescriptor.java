@@ -54,6 +54,9 @@ public class ScreenDescriptor {
     @JsonProperty("logicComponents")
     private List<String> logicComponentIds;
 
+    @JsonProperty("logicAfterValidationComponents")
+    private List<String> logicAfterValidationComponentIds = new LinkedList<>();
+
     @JsonProperty("afterOrderCreatedComponents")
     private List<String> afterOrderCreatedComponentIds;
 
@@ -144,6 +147,7 @@ public class ScreenDescriptor {
                 .subHeader(subHeader)
                 .componentIds(componentIds)
                 .logicComponentIds(logicComponentIds)
+                .logicAfterValidationComponentIds(logicAfterValidationComponentIds)
                 .afterOrderCreatedComponentIds(afterOrderCreatedComponentIds)
                 .isTerminal(isTerminal)
                 .hideBackButton(hideBackButton)

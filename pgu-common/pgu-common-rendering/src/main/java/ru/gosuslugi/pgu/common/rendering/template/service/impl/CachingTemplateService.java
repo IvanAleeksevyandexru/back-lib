@@ -128,7 +128,7 @@ public class CachingTemplateService implements TemplateService {
     }
 
     private void setPackageProcessingStatus(String serviceId, ProcessingStatus status,
-            String statusDescription) {
+                                            String statusDescription) {
         PackageProcessingStatus processingStatus = PackageProcessingStatus.builder()
                 .serviceId(serviceId)
                 .processedOn(LocalDateTime.now().toString())

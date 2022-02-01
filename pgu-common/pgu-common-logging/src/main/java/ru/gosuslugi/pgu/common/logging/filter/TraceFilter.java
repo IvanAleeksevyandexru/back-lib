@@ -25,7 +25,7 @@ public class TraceFilter extends GenericFilterBean {
                          FilterChain chain) throws IOException, ServletException {
         Span currentSpan = this.tracer.currentSpan();
         if (currentSpan != null) {
-                ((HttpServletResponse) response).addHeader("X-Trace-Id", currentSpan.context().traceIdString());
+            ((HttpServletResponse) response).addHeader("X-Trace-Id", currentSpan.context().traceIdString());
         }
         chain.doFilter(request, response);
     }

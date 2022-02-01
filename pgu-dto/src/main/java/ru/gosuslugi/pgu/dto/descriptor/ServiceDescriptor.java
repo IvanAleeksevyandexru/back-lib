@@ -152,8 +152,8 @@ public class ServiceDescriptor {
     @JsonIgnore
     public List<FieldComponent> getFieldComponentsForScreen(ScreenDescriptor screenDescriptor) {
         return screenDescriptor.getComponentIds().stream()
-            .map(id -> this.getFieldComponentById(id).orElseThrow(() -> new ValidationException("Cannot find fieldComponent by id " + id)))
-            .collect(Collectors.toList());
+                .map(id -> this.getFieldComponentById(id).orElseThrow(() -> new ValidationException("Cannot find fieldComponent by id " + id)))
+                .collect(Collectors.toList());
     }
 
     @JsonIgnore
@@ -190,26 +190,26 @@ public class ServiceDescriptor {
         // копируем компоненты
         List<FieldComponent> fields = descriptor.getApplicationFields().stream().map(FieldComponent::getCopy).collect(Collectors.toList());
         return ServiceDescriptor.builder()
-            .service(descriptor.service)
-            .serviceName(descriptor.serviceName)
-            .orderBehaviourType(descriptor.orderBehaviourType)
-            .screens(descriptor.screens)
-            .applicationFields(fields)
-            .initScreens(descriptor.initScreens)
-            .screenRules(descriptor.screenRules)
-            .cycledScreenRules(descriptor.cycledScreenRules)
-            .init(descriptor.init)
-            .draftTtl(descriptor.draftTtl)
-            .alwaysContinueScenario(descriptor.alwaysContinueScenario)
-            .serviceIds(descriptor.serviceIds)
-            .targetIds(descriptor.targetIds)
-            .multipleOrders(descriptor.multipleOrders)
-            .clarifications(descriptor.clarifications)
-            .statusTransformationRules(descriptor.statusTransformationRules)
-            .bookingInfo(descriptor.bookingInfo)
-            .answerServicePrefix(descriptor.answerServicePrefix)
-            .parameters(descriptor.parameters)
-            .availableOrderStatuses(descriptor.availableOrderStatuses)
-            .build();
+                .service(descriptor.service)
+                .serviceName(descriptor.serviceName)
+                .orderBehaviourType(descriptor.orderBehaviourType)
+                .screens(descriptor.screens)
+                .applicationFields(fields)
+                .initScreens(descriptor.initScreens)
+                .screenRules(descriptor.screenRules)
+                .cycledScreenRules(descriptor.cycledScreenRules)
+                .init(descriptor.init)
+                .draftTtl(descriptor.draftTtl)
+                .alwaysContinueScenario(descriptor.alwaysContinueScenario)
+                .serviceIds(descriptor.serviceIds)
+                .targetIds(descriptor.targetIds)
+                .multipleOrders(descriptor.multipleOrders)
+                .clarifications(descriptor.clarifications)
+                .statusTransformationRules(descriptor.statusTransformationRules)
+                .bookingInfo(descriptor.bookingInfo)
+                .answerServicePrefix(descriptor.answerServicePrefix)
+                .parameters(descriptor.parameters)
+                .availableOrderStatuses(descriptor.availableOrderStatuses)
+                .build();
     }
 }
