@@ -15,6 +15,7 @@ import ru.gosuslugi.pgu.common.core.exception.EntityNotFoundException;
 import ru.gosuslugi.pgu.common.core.exception.ExternalServiceException;
 import ru.gosuslugi.pgu.common.logging.annotation.Log;
 import ru.gosuslugi.pgu.dto.descriptor.ServiceDescriptor;
+import ru.gosuslugi.pgu.sd.storage.DescriptorClarificationConverter;
 import ru.gosuslugi.pgu.sd.storage.ServiceDescriptorClient;
 import ru.gosuslugi.pgu.sd.storage.config.ServiceDescriptorClientProperties;
 
@@ -37,8 +38,13 @@ public class ServiceDescriptorClientImpl implements ServiceDescriptorClient {
 
     @Override
     @Cacheable(sync = true)
-    public String getServiceDescriptor(String serviceId) {
-        return callStoreService(serviceId, String.class, DESCRIPTOR_API_PATH);
+    public ServiceDescriptor getServiceDescriptor(String serviceId) {
+        var serviceDescriptor = callStoreService(serviceId, ServiceDescriptor.class, DESCRIPTOR_API_PATH);
+        if (serviceDescriptor == null) {
+            return null;
+        }
+        DescriptorClarificationConverter.convert(serviceDescriptor);
+        return serviceDescriptor;
     }
 
     @Override
