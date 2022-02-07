@@ -1,6 +1,5 @@
-package ru.gosuslugi.pgu.fs.common.descriptor.impl;
+package ru.gosuslugi.pgu.sd.storage;
 
-import lombok.val;
 import ru.gosuslugi.pgu.dto.descriptor.FieldComponent;
 import ru.gosuslugi.pgu.dto.descriptor.ServiceDescriptor;
 
@@ -20,7 +19,7 @@ import static ru.gosuslugi.pgu.dto.descriptor.ServiceDescriptor.CLARIFICATIONS_A
  * данных, не которые их них не помещаются на один экран, а если учесть, что это часть основного экрана, то часто
  * весь компонент занимает больше страницы.
  */
-final class DescriptorClarificationConverter {
+public final class DescriptorClarificationConverter {
 
     private DescriptorClarificationConverter() {}
 
@@ -30,7 +29,7 @@ final class DescriptorClarificationConverter {
      * @param descriptor описание JSON услуги
      */
     public static void convert(ServiceDescriptor descriptor) {
-        val clarifications = descriptor.getClarifications();
+        var clarifications = descriptor.getClarifications();
         descriptor.getApplicationFields()
                 .forEach(it -> transformComponentClarifications(it, clarifications));
         descriptor.setClarifications(null);
@@ -43,18 +42,18 @@ final class DescriptorClarificationConverter {
      * @param clarifications - список модальных окон услуги
      */
     private static void transformComponentClarifications(FieldComponent fieldComponent, Map<String, Object> clarifications) {
-        val attrs = fieldComponent.getAttrs();
+        var attrs = fieldComponent.getAttrs();
         if (attrs == null) return;
-        val clarificationList = fieldComponent.getAttrs().get(CLARIFICATIONS_ATTR);
+        var clarificationList = fieldComponent.getAttrs().get(CLARIFICATIONS_ATTR);
         // Описание выполнено как часть компонента, трансформация не требуется
         if (clarificationList instanceof HashMap) return;
         if (clarificationList == null) return;
 
-        val converted = new HashMap<String, Object>();
+        var converted = new HashMap<String, Object>();
         fieldComponent.getAttrs().put(CLARIFICATIONS_ATTR, converted);
         if (clarifications == null) return;
         for (String key : (ArrayList<String>) clarificationList){
-            val clarification = clarifications.get(key);
+            var clarification = clarifications.get(key);
             if (clarification == null) continue;
             converted.put(key, clarification);
         }

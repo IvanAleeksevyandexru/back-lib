@@ -15,9 +15,9 @@ public interface ServiceDescriptorClient {
     /**
      * Получение сервис-дескриптора в виде строки
      * @param serviceId - идентификатор сервис-дескриптора
-     * @return строка
+     * @return ServiceDescriptor
      */
-    String getServiceDescriptor(String serviceId);
+    ServiceDescriptor getServiceDescriptor(String serviceId);
 
     /**
      * Сохранение сервис-дескриптора

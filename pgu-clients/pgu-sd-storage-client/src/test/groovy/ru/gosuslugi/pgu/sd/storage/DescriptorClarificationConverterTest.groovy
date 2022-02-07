@@ -1,4 +1,4 @@
-package ru.gosuslugi.pgu.fs.common.descriptor.impl
+package ru.gosuslugi.pgu.sd.storage
 
 import ru.gosuslugi.pgu.dto.descriptor.FieldComponent
 import ru.gosuslugi.pgu.dto.descriptor.ServiceDescriptor
