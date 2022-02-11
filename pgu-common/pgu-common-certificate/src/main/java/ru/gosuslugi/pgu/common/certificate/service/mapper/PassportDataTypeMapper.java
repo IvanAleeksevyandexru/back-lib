@@ -13,12 +13,15 @@ import ru.gosuslugi.pgu.components.dto.StateDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Mapper(imports = JsonProcessingUtil.class)
 public abstract class PassportDataTypeMapper {
 
     public static final PassportDataTypeMapper INSTANCE = Mappers.getMapper(PassportDataTypeMapper.class);
+    private static final Pattern ALL_WHITESPACES = Pattern.compile("\\s");
+
     protected final String PASSPORT = "Паспорт гражданина РФ";
 
     protected List<FieldDto> passportFieldDtos;
@@ -51,7 +54,7 @@ public abstract class PassportDataTypeMapper {
         StringBuilder number = new StringBuilder(calcDocumentData(fieldDtos, DocumentFields.NUMBER));
         if (number.length() == 0) {
             String series_and_number = calcDocumentData(fieldDtos, DocumentFields.SERIES_AND_NUMBER);
-            String[] split = series_and_number.split("\\s");
+            String[] split = ALL_WHITESPACES.split(series_and_number);
             if (split.length == 0) {
                 return new SeriesAndNumber(series, series_and_number);
             } else {

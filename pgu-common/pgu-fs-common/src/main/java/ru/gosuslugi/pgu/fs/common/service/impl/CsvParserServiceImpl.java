@@ -28,6 +28,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ru.gosuslugi.pgu.components.regex.RegExpContext.matchesByRegex;
+
 /**
  * Сервис парсинга CSV файлов
  */
@@ -130,7 +132,7 @@ public class CsvParserServiceImpl implements CsvParserService {
                     // проверяем по маске
                     if (!StringUtils.isEmpty(columnDescriptions.get(i).getMask())
                             && !StringUtils.isEmpty(value)
-                            && !value.matches(columnDescriptions.get(i).getMask())) {
+                            && !matchesByRegex(value, columnDescriptions.get(i).getMask())) {
                         return new CsvParseResult(
                                 false,
                                 !StringUtils.isEmpty(columnDescriptions.get(i).getErrorMsg())

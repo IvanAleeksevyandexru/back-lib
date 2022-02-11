@@ -13,6 +13,7 @@ import ru.gosuslugi.pgu.fs.common.component.validation.ValidationRuleImpl;
 import ru.gosuslugi.pgu.fs.common.utils.StringConvertHelper;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static ru.gosuslugi.pgu.components.ValidationUtil.mapEntry;
 
@@ -25,6 +26,7 @@ import static ru.gosuslugi.pgu.components.ValidationUtil.mapEntry;
 @RequiredArgsConstructor
 public class OgrnComponent extends AbstractComponent<String> {
 
+    private static final Pattern OGRN_REGEXP = Pattern.compile("\\d{13}|\\d-\\d{2}-\\d{2}-\\d{7}-\\d");
     private final String DEFAULT_ERROR_MESSAGE = "Некорректный ОГРН";
 
     @Override
@@ -59,8 +61,8 @@ public class OgrnComponent extends AbstractComponent<String> {
      *
      * @return
      */
-    protected String getValueRegExp() {
-        return "\\d{13}|\\d-\\d{2}-\\d{2}-\\d{7}-\\d";
+    protected Pattern getValueRegExp() {
+        return OGRN_REGEXP;
     }
 
     /**
@@ -79,7 +81,7 @@ public class OgrnComponent extends AbstractComponent<String> {
      * @return false - валидация не пройдена
      */
     private boolean checkOgrn(String value) {
-        if (!value.matches(getValueRegExp())) {
+        if (!getValueRegExp().matcher(value).matches()) {
             return false;
         }
         String digitsValue = StringConvertHelper.getDigitString(value);
