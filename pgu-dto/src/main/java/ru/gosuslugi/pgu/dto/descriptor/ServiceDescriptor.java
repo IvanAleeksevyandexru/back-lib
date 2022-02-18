@@ -121,6 +121,11 @@ public class ServiceDescriptor {
 
     private List<AnalyticsTag> analyticsTags = new ArrayList<>();
 
+    /**
+     * Флаг, указывающий нужно ли проверять текущий регион пользователя с регионом в заявлении
+     */
+    private Boolean compareRegions = false;
+
 
     @JsonIgnore
     public Optional<FieldComponent> getFieldComponentById(String id) {
