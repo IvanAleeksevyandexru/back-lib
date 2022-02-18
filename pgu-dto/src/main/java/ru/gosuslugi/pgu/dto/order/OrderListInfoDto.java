@@ -28,4 +28,9 @@ public class OrderListInfoDto {
     @Schema(description = "Информация по заявлениям")
     private List<ShortOrderData> orders = new ArrayList();
 
+    @Schema(description = "Флаг, указывающий нужно ли проверять текущий регион пользователя с регионом в заявлении")
+    private Boolean compareRegions = false;
+
+    @Schema(description = "Название услуги из Service Descriptor")
+    private String serviceName;
 }
