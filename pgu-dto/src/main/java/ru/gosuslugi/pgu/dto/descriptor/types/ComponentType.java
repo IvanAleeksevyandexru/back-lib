@@ -274,6 +274,7 @@ public enum ComponentType {
      */
     MaskDropDown,
     BillInfo,
+    CreateBill,
     PaymentTypeSelector,
     FieldList,
     GFieldList,
