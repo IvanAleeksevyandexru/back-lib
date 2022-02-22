@@ -14,6 +14,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.ComparisonDateTool;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.MathTool;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.apache.velocity.tools.generic.SortTool;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,7 @@ public class VelocityConfig {
     public static final String APACHE_STRING_TOOL_VAR_NAME = "apacheStrTool";
     public static final String INTEGER_VAR_NAME = "Integer";
     public static final String SORT_TOOL_VAR_NAME = "sorter";
+    public static final String NUMBER_TOOL_VAR_NAME = "numberTool";
 
     /**
      * Переносит в настройки {@link VelocityEngine#setProperty(String, Object)} опции, которые
@@ -100,6 +102,7 @@ public class VelocityConfig {
         context.put(INTEGER_VAR_NAME, Integer.class);
         context.put(XML_SERVICE_VAR_NAME, new XmlService());
         context.put(SORT_TOOL_VAR_NAME, new SortTool());
+        context.put(NUMBER_TOOL_VAR_NAME, new NumberTool());
         return context;
     }
 }
