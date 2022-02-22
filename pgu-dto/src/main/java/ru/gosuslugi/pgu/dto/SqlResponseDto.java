@@ -38,6 +38,9 @@ public class SqlResponseDto {
         var items = new ArrayList<Map<String, String>>();
 
         for (List<String> row: rows) {
+            if (row.isEmpty()) {
+                return null;
+            }
             var item = new HashMap<String, String>();
             for (int i = 0; i < row.size(); i++) {
                 item.put(columnMeta.get(i).getName(), row.get(i));
