@@ -15,6 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScreenButton {
+    private String id;
     private String label;
     private String value;
     private String type;
