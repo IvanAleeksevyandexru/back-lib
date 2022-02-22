@@ -1,7 +1,6 @@
 package ru.gosuslugi.pgu.common.esia.search.dto;
 
 import lombok.Data;
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 import ru.atc.carcass.security.model.EsiaOAuthTokenSession;
@@ -11,11 +10,10 @@ import ru.atc.carcass.security.rest.model.person.*;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -29,7 +27,6 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class UserPersonalData {
 
     private static final Predicate<PersonDoc> isOmsDocType = x -> ("MDCL_PLCY".equals(x.getType()));
-    private static final Pattern ALL_WHITESPACES = Pattern.compile("(\\s*-\\s*)|(\\s+)");
 
     private String token;
 
@@ -117,24 +114,18 @@ public class UserPersonalData {
         if (!series.equals("")) {
             return Optional.of(omsDoc);
         }
-        number = ALL_WHITESPACES.matcher(number).replaceAll("/");// для удобства свожу все разделители к одному
-        String[] splitted = number.contains("№") ? number.split( "№") : number.split("/");
+        number = number.replaceAll("(\\s*-\\s*)|(\\s+)", "/");// для удобства свожу все разделители к одному
+        String[] splitted = number.contains("№") ? number.split("[№]") : number.split("[/]");
 
-        if (splitted.length == 1 || splitted.length == 4) {
-            String replacement = number.replace("/", "");
-            if (replacement.length() == 16 && NumberUtils.isDigits(replacement)) {
-                omsDoc.setNumber(replacement);
-                return Optional.of(omsDoc);
-            }
+        if ((splitted.length == 1 || splitted.length == 4) && number.replaceAll("/", "").matches("^\\d{16}$")) {
+            omsDoc.setNumber(number.replaceAll("/", ""));
+            return Optional.of(omsDoc);
         }
 
-        if (splitted.length == 2) {
-            String replacement = splitted[1].replace("/", "");
-            if (replacement.length() >= 1 && NumberUtils.isDigits(replacement)) {
-                omsDoc.setSeries(splitted[0].replace("/", ""));
-                omsDoc.setNumber(replacement);
-                return Optional.of(omsDoc);
-            }
+        if (splitted.length == 2 && splitted[1].replaceAll("/", "").matches("^\\d+$")) {
+            omsDoc.setSeries(splitted[0].replaceAll("/", ""));
+            omsDoc.setNumber(splitted[1].replaceAll("/", ""));
+            return Optional.of(omsDoc);
         }
         return Optional.of(omsDoc);
     }

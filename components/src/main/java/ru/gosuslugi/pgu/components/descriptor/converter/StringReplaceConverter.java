@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
-import static ru.gosuslugi.pgu.components.regex.RegExpContext.getValueByRegex;
 
 /**
  * Replace subsrtings by regex
@@ -27,7 +26,7 @@ public class StringReplaceConverter implements Converter {
 
         if (optional.get() instanceof Map) {
             ((Map<String, String>) optional.get())
-                    .forEach((k, v) -> res[0] = getValueByRegex(k, pattern -> pattern.matcher(res[0]).replaceAll(v)));
+                    .forEach((k, v) -> res[0] = res[0].replaceAll(k, v));
         }
 
         return res[0];

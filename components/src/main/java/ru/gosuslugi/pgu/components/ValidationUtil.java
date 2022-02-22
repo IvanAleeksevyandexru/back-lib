@@ -19,7 +19,6 @@ import static ru.gosuslugi.pgu.components.ComponentAttributes.ERROR_ATTR;
 import static ru.gosuslugi.pgu.components.ComponentAttributes.ERROR_DESC_ATTR;
 import static ru.gosuslugi.pgu.components.FieldComponentUtil.VALIDATION_ARRAY_KEY;
 import static ru.gosuslugi.pgu.components.RegExpUtil.*;
-import static ru.gosuslugi.pgu.components.regex.RegExpContext.matchesByRegex;
 
 public class ValidationUtil {
 
@@ -188,7 +187,7 @@ public class ValidationUtil {
                     if (
                             !incorrectAnswers.containsKey(field.getFieldName())
                                     && !isNull(stringToCheck)
-                                    && !matchesByRegex(stringToCheck, validationRule.get(REG_EXP_VALUE))
+                                    && !stringToCheck.matches(validationRule.get(REG_EXP_VALUE))
                     ) {
                         errorsMap.put(
                                 field.getFieldName(),
