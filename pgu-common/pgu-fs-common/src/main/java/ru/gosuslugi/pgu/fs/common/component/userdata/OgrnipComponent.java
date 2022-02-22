@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.gosuslugi.pgu.dto.descriptor.types.ComponentType;
 
+import java.util.regex.Pattern;
+
 /**
  * Класс содержит вспомогательные методы компонента ОГРНИП
  * - в последующем компонент должен быть отнаследован от StringInput
@@ -14,6 +16,7 @@ import ru.gosuslugi.pgu.dto.descriptor.types.ComponentType;
 @RequiredArgsConstructor
 public class OgrnipComponent extends OgrnComponent {
 
+    private static final Pattern OGRNIP_REGEXP = Pattern.compile("\\d{15}|\\d-\\d{2}-\\d{2}-\\d{9}-\\d");
     private final String DEFAULT_ERROR_MESSAGE = "Некорректный ОГРНИП";
 
 
@@ -36,8 +39,8 @@ public class OgrnipComponent extends OgrnComponent {
      * @return
      */
     @Override
-    protected String getValueRegExp() {
-        return "\\d{15}|\\d-\\d{2}-\\d{2}-\\d{9}-\\d";
+    protected Pattern getValueRegExp() {
+        return OGRNIP_REGEXP;
     }
 
     /**

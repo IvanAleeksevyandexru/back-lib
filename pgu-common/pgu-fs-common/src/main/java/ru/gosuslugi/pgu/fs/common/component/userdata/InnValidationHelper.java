@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.util.StringUtils.hasText;
+import static ru.gosuslugi.pgu.components.regex.RegExpContext.matchesByRegex;
 
 /**
  * Класс содержит методы, используемые в алгоритмах проверки контрольной сумма ИНН
@@ -77,7 +78,7 @@ public abstract class InnValidationHelper {
         if (!hasText(value) && fieldComponent.isRequired()) {
             incorrectAnswers.put(entry.getKey(), errorMessage);
         }
-        if (hasText(value) && !value.matches(regExString)) {
+        if (hasText(value) && !matchesByRegex(value, regExString)) {
             incorrectAnswers.put(entry.getKey(), errorMessage);
         }
         return incorrectAnswers;

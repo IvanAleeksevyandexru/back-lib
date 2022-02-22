@@ -7,10 +7,12 @@ import ru.gosuslugi.pgu.fs.common.utils.AnswerUtil;
 
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegExpValidation implements ValidationRule {
 
-    private String regex;
+    private Pattern pattern;
     private String errorMessage;
 
     /**
@@ -19,17 +21,19 @@ public class RegExpValidation implements ValidationRule {
     public RegExpValidation() {
     }
 
-    public RegExpValidation(String regex, String errorMessage) {
-        this.regex = regex;
+    public RegExpValidation(Pattern pattern, String errorMessage) {
+        this.pattern = pattern;
         this.errorMessage = errorMessage;
     }
 
     @Override
     public Map.Entry<String, String> validate(Map.Entry<String, ApplicantAnswer> entry, FieldComponent fieldComponent) {
-        if (regex == null) {
-            return ValidationUtil.validateRegExp(entry.getKey(), AnswerUtil.getValue(entry), fieldComponent);
+        String value = AnswerUtil.getValue(entry);
+        if (pattern == null) {
+            return ValidationUtil.validateRegExp(entry.getKey(), value, fieldComponent);
         }
-        if (!AnswerUtil.getValue(entry).matches(regex)) {
+        Matcher matcher = pattern.matcher(value);
+        if (!matcher.matches()) {
             return new AbstractMap.SimpleEntry<>(entry.getKey(), errorMessage);
         }
         return null;

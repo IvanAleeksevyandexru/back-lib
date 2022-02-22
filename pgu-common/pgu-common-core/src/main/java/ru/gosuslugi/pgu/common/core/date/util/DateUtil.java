@@ -13,6 +13,7 @@ import java.time.temporal.ChronoField;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.temporal.ChronoUnit.MONTHS;
@@ -25,6 +26,7 @@ public class DateUtil {
     private static final Map<String, DateTimeFormatter> ACCURACY_FORMATS = new HashMap<>();
 
     public final static String ESIA_DATE_FORMAT = "dd.MM.yyyy";
+    private static final Pattern WORD_PATTERN = Pattern.compile("(\\w+)=");
 
     static {
         ACCURACY_STRING_CUT.put(Accuracy.YEAR.getName(), 4);
@@ -144,7 +146,7 @@ public class DateUtil {
     }
 
     public static OffsetDateTime addToDate(String addToDate, OffsetDateTime value) {
-        String addPart = addToDate.replaceAll("(\\w+)=", "\"$1\":");
+        String addPart = WORD_PATTERN.matcher(addToDate).replaceAll("\"$1\":");
         HashMap<String, Integer> dateAdder = JsonProcessingUtil.fromJson(addPart, HashMap.class);
         value = value.plusYears(dateAdder.getOrDefault(Accuracy.YEAR.getName(), 0).longValue());
         value = value.plusMonths(dateAdder.getOrDefault(Accuracy.MONTH.getName(), 0).longValue());

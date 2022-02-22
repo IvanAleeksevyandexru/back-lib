@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
+import static ru.gosuslugi.pgu.components.regex.RegExpContext.matchesByRegex;
 
 public class RegExpUtil {
 
@@ -50,7 +51,7 @@ public class RegExpUtil {
                     .stream()
                     .map(
                             validationRule ->
-                                    value.matches(validationRule.get(REG_EXP_VALUE))
+                                    matchesByRegex(value, validationRule.get(REG_EXP_VALUE))
                                             ? null
                                             : validationRule.get(REG_EXP_ERROR_MESSAGE)
                     )
