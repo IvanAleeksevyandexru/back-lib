@@ -9,4 +9,5 @@ public class ScreenButtonAttrs {
     private Integer stepsBack;
     private List<OperationalSystemType> showOnOS;
     private Boolean hidden;
+    private List<Object> ref;
 }
