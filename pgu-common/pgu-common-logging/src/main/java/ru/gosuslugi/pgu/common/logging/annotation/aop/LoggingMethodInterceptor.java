@@ -9,17 +9,11 @@ import org.springframework.util.StringUtils;
 import ru.gosuslugi.pgu.common.logging.annotation.Log;
 
 import java.lang.reflect.Method;
-import java.util.regex.Pattern;
 
 /**
  * Обработчик логгируемых методов
  */
 public class LoggingMethodInterceptor implements MethodInterceptor {
-
-    private static final Pattern METHOD_CLASS_NAME_PATTERN = Pattern.compile("\\$methodClassAndName");
-    private static final Pattern ARGS_PATTERN = Pattern.compile("\\$args");
-    private static final Pattern METHOD_CLASS_PATTERN = Pattern.compile("\\$methodClass");
-    private static final Pattern METHOD_NAME_PATTERN = Pattern.compile("\\$methodName");
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -55,10 +49,10 @@ public class LoggingMethodInterceptor implements MethodInterceptor {
         String methodClassAndName = methodClass + '.' + methodName;
         String args = getArgs(invocation.getArguments());
 
-        String message = METHOD_CLASS_NAME_PATTERN.matcher(messageTemplate).replaceAll(methodClassAndName);
-        message = METHOD_CLASS_PATTERN.matcher(message).replaceAll(methodClass);
-        message = METHOD_NAME_PATTERN.matcher(message).replaceAll(methodName);
-        message = ARGS_PATTERN.matcher(message).replaceAll(args);
+        String message = messageTemplate.replaceAll("\\$methodClassAndName", methodClassAndName)
+                .replaceAll("\\$methodClass", methodClass)
+                .replaceAll("\\$methodName", methodName)
+                .replaceAll("\\$args", args);
 
         LogAnnotationUtils.getLogMethod(log, annotation.paramsLevel()).log(message, invocation.getArguments());
     }

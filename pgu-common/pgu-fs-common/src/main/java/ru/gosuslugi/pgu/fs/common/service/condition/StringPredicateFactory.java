@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static java.util.function.Predicate.not;
-import static ru.gosuslugi.pgu.components.regex.RegExpContext.matchesByRegex;
 
 @Component
 public class StringPredicateFactory implements PredicateFactory<String> {
@@ -25,9 +24,9 @@ public class StringPredicateFactory implements PredicateFactory<String> {
             case notContainsInList:
                 return not(args::contains);
             case matches:
-                return s -> matchesByRegex(s, args.get(0));
+                return s -> s.matches(args.get(0));
             case nonMatches:
-                return s -> !matchesByRegex(s, args.get(0));
+                return s -> !s.matches(args.get(0));
             case regionMatches:
                 return s -> s.regionMatches(Integer.parseInt(args.get(1)), args.get(0), Integer.parseInt(args.get(2)), Integer.parseInt(args.get(3)));
             case regionNonMatches:
