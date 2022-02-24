@@ -1,12 +1,12 @@
 package ru.gosuslugi.pgu.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @Schema(description = "Запрос в барбарбок")
 public class SmevConverterPushRequestDto {
