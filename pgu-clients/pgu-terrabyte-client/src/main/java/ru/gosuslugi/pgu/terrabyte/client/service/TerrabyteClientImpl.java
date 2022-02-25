@@ -25,6 +25,7 @@ import ru.gosuslugi.pgu.terrabyte.client.model.CopyFileRequestDto;
 import ru.gosuslugi.pgu.terrabyte.client.model.DigestServiceDto;
 import ru.gosuslugi.pgu.terrabyte.client.model.FileInfo;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class TerrabyteClientImpl implements TerrabyteClient {
     private static final String UPLOAD_FILE = "/upload?mnemonic={mnemonic}&name={name}&objectId={objectId}&objectType={objectType}&mimeType={mimeType}&uuid={uuid}&hasSign=false&chunk=0&chunks=1";
     private static final String DELETE = "/delete";
     private static final String COPY_FILE = "/copy";
+    private static final String ZIP_FILES = "/zip";
 
 
     private final RestTemplate restTemplate;
@@ -72,7 +74,6 @@ public class TerrabyteClientImpl implements TerrabyteClient {
             log.error("Ошибка при запросе сведений по файлам в сервис Терабайт для orderId = {}", orderId, e);
             return List.of();
         }
-
     }
 
     @Override
@@ -171,16 +172,31 @@ public class TerrabyteClientImpl implements TerrabyteClient {
 
     @Override
     public void copyFile(FileInfo src, FileInfo trg) {
-        CopyFileRequestDto copyFileRequest = new CopyFileRequestDto(List.of(
-                new CopyFileRequestDto.CopyPair(
-                        new CopyFileRequestDto.FileKey(src.getObjectId(), src.getObjectTypeId(), src.getMnemonic(), false),
-                        new CopyFileRequestDto.FileKey(trg.getObjectId(), trg.getObjectTypeId(), trg.getMnemonic(), false))));
+        var copyFileRequest = getCopyFileRequestDto(src, trg);
         try {
             HttpEntity<CopyFileRequestDto> req = new HttpEntity<>(copyFileRequest, new HttpHeaders());
             restTemplate.postForEntity(properties.getInternalDataserviceUrl() + COPY_FILE, req, String.class);
         } catch (Exception e) {
             throw new ExternalServiceException("Couldn't copy files by request" + copyFileRequest + ": " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void copyFile(FileInfo src, FileInfo trg, Long userId, String token) {
+        var copyFileRequest = getCopyFileRequestDto(src, trg);
+        try {
+            HttpEntity<CopyFileRequestDto> req = new HttpEntity<>(copyFileRequest, tokenToHeaders(userId, token, MediaType.APPLICATION_JSON));
+            restTemplate.postForEntity(properties.getStorageUrl() + "/files" + COPY_FILE, req, String.class);
+        } catch (Exception e) {
+            throw new ExternalServiceException("Couldn't copy files by request" + copyFileRequest + ": " + e.getMessage(), e);
+        }
+    }
+
+    private CopyFileRequestDto getCopyFileRequestDto(FileInfo src, FileInfo trg) {
+        return new CopyFileRequestDto(List.of(
+                new CopyFileRequestDto.CopyPair(
+                        new CopyFileRequestDto.FileKey(src.getObjectId(), src.getObjectTypeId(), src.getMnemonic(), false),
+                        new CopyFileRequestDto.FileKey(trg.getObjectId(), trg.getObjectTypeId(), trg.getMnemonic(), false))));
     }
 
     @Override
@@ -216,4 +232,65 @@ public class TerrabyteClientImpl implements TerrabyteClient {
         return String.join("/", args);
     }
 
+    @Override
+    public FileInfo zipOrderFiles(Long orderId, boolean delete, String fileName, String mnemonic, Long userId, String token) {
+        final HttpHeaders headers = new HttpHeaders();
+
+        Map<String, Object> params = Map.of(
+                "delete", delete,
+                "fileName", fileName,
+                "objectId", orderId,
+                "objectType", 2,
+                "mnemonic", mnemonic
+        );
+
+        List<String> body = new ArrayList<>();
+        for (FileInfo file: getAllFilesByOrderId(orderId, userId, token)) {
+            body.add("terrabyte://00/" + file.getObjectId() + "/" + file.getMnemonic() + "/" + file.getObjectTypeId());
+        }
+        HttpEntity<List<String>> req = new HttpEntity<>(body, headers);
+
+        restTemplate.postForEntity(
+                properties.getInternalStorageUrl() + ZIP_FILES + "?delete={delete}&fileName={fileName}&objectId={objectId}&objectType={objectType}&mnemonic={mnemonic}",
+                req,
+                String.class,
+                params);
+
+        FileInfo file = new FileInfo();
+        file.setMnemonic(mnemonic);
+        file.setObjectId(orderId);
+        file.setObjectTypeId(2);
+        return getFileInfo(file, userId, token);
+    }
+
+    @Override
+    public FileInfo zipFiles(Long objectId, boolean delete, String fileName, String mnemonic, List<FileInfo> fileList, Long userId, String token) {
+        final HttpHeaders headers = new HttpHeaders();
+
+        Map<String, Object> params = Map.of(
+                "delete", delete,
+                "fileName", fileName,
+                "objectId", objectId,
+                "objectType", 2,
+                "mnemonic", mnemonic
+        );
+
+        List<String> body = new ArrayList<>();
+        for (FileInfo file: fileList) {
+            body.add("terrabyte://00/" + file.getObjectId() + "/" + file.getMnemonic() + "/" + file.getObjectTypeId());
+        }
+        HttpEntity<List<String>> req = new HttpEntity<>(body, headers);
+
+        restTemplate.postForEntity(
+                properties.getInternalStorageUrl() + ZIP_FILES + "?delete={delete}&fileName={fileName}&objectId={objectId}&objectType={objectType}&mnemonic={mnemonic}",
+                req,
+                String.class,
+                params);
+
+        FileInfo file = new FileInfo();
+        file.setMnemonic(mnemonic);
+        file.setObjectId(objectId);
+        file.setObjectTypeId(2);
+        return getFileInfo(file, userId, token);
+    }
 }

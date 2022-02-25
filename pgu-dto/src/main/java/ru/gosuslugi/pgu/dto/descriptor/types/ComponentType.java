@@ -334,6 +334,7 @@ public enum ComponentType {
     FileLoad,
     /** Компонент обработки файлов */
     OrderFileProcessingComponent,
+    AttachmentContent,
 
     /** Компонент для получения информации из ГЭПС */
     GepsData,
