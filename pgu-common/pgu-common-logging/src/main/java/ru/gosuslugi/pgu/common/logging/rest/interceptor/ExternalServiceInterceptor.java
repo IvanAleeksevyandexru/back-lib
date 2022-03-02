@@ -60,6 +60,17 @@ public class ExternalServiceInterceptor {
         return result;
     }
 
+    public <T> T surroundByLogs(String serviceName, Supplier<T> func, String requestObject) {
+        long start = System.currentTimeMillis();
+        log.info("External service request (custom): {}; requestBody: {}", serviceName, requestObject);
+        T result = func.get();
+        long time = System.currentTimeMillis() - start;
+        log.info(Markers.append(MDC_KEY_REQUEST_TIME, time),
+                "External rest service response (custom): {}; body=[{}]; time: {} ms",
+                serviceName, responseToString(result), time);
+        return result;
+    }
+
     private String responseToString(Object o) {
         return flatString(truncate(o == null ? "" : o.toString(), bodyMaxLen));
     }
