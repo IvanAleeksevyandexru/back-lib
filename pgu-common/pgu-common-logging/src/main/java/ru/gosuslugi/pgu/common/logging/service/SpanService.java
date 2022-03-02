@@ -81,4 +81,15 @@ public class SpanService {
         }
     }
 
+    public <T> T runExternalService(String serviceName, String spanName, Supplier<T> func, Map<String, String> tags, String requestObject) {
+        Span newSpan = tracer.nextSpan().name(spanName);
+        tags.entrySet()
+                .forEach(entry -> newSpan.tag(entry.getKey(), entry.getValue()));
+        try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan.start())) {
+            return externalServiceInterceptor.surroundByLogs(serviceName, func, requestObject);
+        } finally {
+            newSpan.finish();
+        }
+    }
+
 }
