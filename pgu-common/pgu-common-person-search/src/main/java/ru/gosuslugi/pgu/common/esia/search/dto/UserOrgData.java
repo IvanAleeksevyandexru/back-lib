@@ -83,13 +83,13 @@ public class UserOrgData {
                 .orElse(null);
     }
 
-    public Object getOrgChief() {
-        if (Objects.nonNull(chief)) {
+    public String getOrgChief() {
+        if (Objects.nonNull(chief) && Objects.nonNull(chief.isChief())) {
             debug(log, () -> String.format("Get org person chief=%s, oid=%s",
                     Optional.ofNullable(chief).map(Objects::toString).orElse(""), Optional.ofNullable(org.getOid()).orElse("")));
-            return chief.isChief();
+            return chief.isChief().toString();
         }
-        if (Objects.nonNull(orgRole)) {
+        if (Objects.nonNull(orgRole) && Objects.nonNull(orgRole.getChief())) {
             debug(log, () -> String.format("Get org chief from orgRole=%s, oid=%s",
                     Optional.ofNullable(orgRole).map(Objects::toString).orElse(""), Optional.ofNullable(org.getOid()).orElse("")));
             return orgRole.getChief();
