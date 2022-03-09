@@ -6,4 +6,5 @@ import lombok.Data;
 public class LocalizedDisclaimerMessage {
     private String language;
     private String message;
+    private String title;
 }
