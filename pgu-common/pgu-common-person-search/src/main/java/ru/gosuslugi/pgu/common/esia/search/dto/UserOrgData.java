@@ -41,6 +41,7 @@ public class UserOrgData {
     private List<EsiaContact> contacts;
     private List<EsiaVehicle> vehicles;
     private Person chief;
+    private Long chiefUserId;
     private EsiaRole orgRole;
     private String systemAuthority;
     private List<EsiaAttorney> empAttorneys;
@@ -53,7 +54,10 @@ public class UserOrgData {
         orgsContainer.getEmployees().stream()
                 .filter(Person::isChief)
                 .findAny()
-                .ifPresent(this::setChief);
+                .ifPresent(chiefPerson -> {
+                    this.setChief(chiefPerson);
+                    this.setChiefUserId(Long.parseLong(chiefPerson.getUserId()));
+                });
         orgsContainer.getRoles().stream()
                 .filter(role -> (Objects.equals(role.getOid(), org.getOid())))
                 .findAny()
@@ -81,21 +85,5 @@ public class UserOrgData {
                 .findFirst()
                 .map(EsiaContact::getValue)
                 .orElse(null);
-    }
-
-    public String getOrgChief() {
-        if (Objects.nonNull(chief) && Objects.nonNull(chief.isChief())) {
-            debug(log, () -> String.format("Get org person chief=%s, oid=%s",
-                    Optional.ofNullable(chief).map(Objects::toString).orElse(""), Optional.ofNullable(org.getOid()).orElse("")));
-            return chief.isChief().toString();
-        }
-        if (Objects.nonNull(orgRole) && Objects.nonNull(orgRole.getChief())) {
-            debug(log, () -> String.format("Get org chief from orgRole=%s, oid=%s",
-                    Optional.ofNullable(orgRole).map(Objects::toString).orElse(""), Optional.ofNullable(org.getOid()).orElse("")));
-            return orgRole.getChief();
-        }
-        warn(log, () -> String.format("Сhief attribute was null in org person and role with oid=%s",
-                Optional.ofNullable(org.getOid()).orElse("")));
-        return null;
     }
 }
