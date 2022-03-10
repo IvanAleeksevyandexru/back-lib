@@ -1,6 +1,7 @@
 package ru.gosuslugi.pgu.common.esia.search.dto;
 
 import lombok.Data;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 import ru.atc.carcass.security.rest.model.EsiaAddress;
@@ -12,11 +13,17 @@ import ru.atc.carcass.security.rest.model.orgs.OrgsContainer;
 import ru.atc.carcass.security.rest.model.person.EsiaRole;
 import ru.atc.carcass.security.rest.model.person.Person;
 import ru.gosuslugi.pgu.common.core.date.util.DateUtil;
+import ru.gosuslugi.pgu.common.core.logger.LoggerUtil;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static ru.gosuslugi.pgu.common.core.logger.LoggerUtil.debug;
+import static org.slf4j.LoggerFactory.getLogger;
+import static ru.gosuslugi.pgu.common.core.logger.LoggerUtil.warn;
 
 /**
  * Хранилище данных юр. лица
@@ -27,6 +34,7 @@ import java.util.stream.Collectors;
 @RequestScope
 public class UserOrgData {
     public static final String VERIFIED_ATTR = "VERIFIED";
+    private static final Logger log = getLogger(UserOrgData.class);
 
     private Org org;
     private List<EsiaAddress> addresses;
@@ -73,5 +81,21 @@ public class UserOrgData {
                 .findFirst()
                 .map(EsiaContact::getValue)
                 .orElse(null);
+    }
+
+    public String getOrgChief() {
+        if (Objects.nonNull(chief) && Objects.nonNull(chief.isChief())) {
+            debug(log, () -> String.format("Get org person chief=%s, oid=%s",
+                    Optional.ofNullable(chief).map(Objects::toString).orElse(""), Optional.ofNullable(org.getOid()).orElse("")));
+            return chief.isChief().toString();
+        }
+        if (Objects.nonNull(orgRole) && Objects.nonNull(orgRole.getChief())) {
+            debug(log, () -> String.format("Get org chief from orgRole=%s, oid=%s",
+                    Optional.ofNullable(orgRole).map(Objects::toString).orElse(""), Optional.ofNullable(org.getOid()).orElse("")));
+            return orgRole.getChief();
+        }
+        warn(log, () -> String.format("Сhief attribute was null in org person and role with oid=%s",
+                Optional.ofNullable(org.getOid()).orElse("")));
+        return null;
     }
 }

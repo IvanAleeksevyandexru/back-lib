@@ -6,14 +6,13 @@ import java.util.List;
 
 @Data
 public class PortalDisclaimer {
-    Long id;
-    String mnemonic;
-    String code;
-    String region;
-    List<LocalizedDisclaimerMessage> messages;
-    String level;
-    Boolean notificationEnabled;
-    Boolean isPriority;
-    Boolean isHidden;
-    String title;
+    private Long id;
+    private String mnemonic;
+    private String code;
+    private String region;
+    private List<LocalizedDisclaimerMessage> messages;
+    private String level;
+    private Boolean notificationEnabled;
+    private Boolean isPriority;
+    private Boolean isHidden;
 }

@@ -148,11 +148,4 @@ public class UserPersonalData {
         Random random = new SecureRandom(arr);
         return random.longs(1, min, max).findFirst().getAsLong();
     }
-
-    public Object getChief() {
-        if (Objects.nonNull(currentRole) && Objects.nonNull(currentRole.getChief())) {
-            return currentRole.getChief();
-        }
-        return Objects.nonNull(person) ? person.isChief() : null;
-    }
 }
