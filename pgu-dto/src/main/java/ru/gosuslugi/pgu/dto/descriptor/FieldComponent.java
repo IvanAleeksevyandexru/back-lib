@@ -2,14 +2,20 @@ package ru.gosuslugi.pgu.dto.descriptor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang.SerializationUtils;
+import ru.gosuslugi.pgu.common.core.json.JsonProcessingUtil;
 import ru.gosuslugi.pgu.dto.descriptor.types.ComponentType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Class that describes components (one input field element on a screen)
@@ -169,6 +175,9 @@ public class FieldComponent {
         byte[] originalMapBytes = SerializationUtils.serialize(attrOriginalMap);
         HashMap<String, Object> deserializedMap = (HashMap<String, Object>) SerializationUtils.deserialize(originalMapBytes);
 
+        List<LinkedValue> clonedLinkedValues = JsonProcessingUtil.fromJson(
+                JsonProcessingUtil.toJson(fieldComponent.getLinkedValues()), new TypeReference<>() {});
+
         return FieldComponent.builder()
                 .id(fieldComponent.getId())
                 .type(fieldComponent.getType())
@@ -176,7 +185,7 @@ public class FieldComponent {
                 .attrs(deserializedMap)
                 .value(fieldComponent.getValue())
                 .required(fieldComponent.isRequired())
-                .linkedValues(fieldComponent.getLinkedValues())
+                .linkedValues(clonedLinkedValues)
                 .arguments(new HashMap<>())
                 .suggestionId(fieldComponent.getSuggestionId())
                 .pronounceText(fieldComponent.getPronounceText())
