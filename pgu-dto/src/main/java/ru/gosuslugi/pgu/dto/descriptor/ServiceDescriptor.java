@@ -215,6 +215,7 @@ public class ServiceDescriptor {
                 .answerServicePrefix(descriptor.answerServicePrefix)
                 .parameters(descriptor.parameters)
                 .availableOrderStatuses(descriptor.availableOrderStatuses)
+                .analyticsTags(descriptor.analyticsTags)
                 .build();
     }
 }
