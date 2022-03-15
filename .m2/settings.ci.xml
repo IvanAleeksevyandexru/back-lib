@@ -14,7 +14,6 @@
     </server>
   </servers>
 
-
   <mirrors>
     <mirror>
       <id>insecure-repo</id>
