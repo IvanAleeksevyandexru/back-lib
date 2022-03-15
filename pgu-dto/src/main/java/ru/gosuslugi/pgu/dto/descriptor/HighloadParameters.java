@@ -39,4 +39,7 @@ public class HighloadParameters {
     private String eserviceAttrServiceNameForOrder;
     private Boolean eserviceAttrDeleteDraft = false;
 
+    @JsonProperty(value = "eserviceAttrPassCode")
+    private String eserviceAttrPassCode;
+
 }
