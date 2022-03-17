@@ -41,8 +41,4 @@ public class HighloadParameters {
     @JsonProperty(value = "eserviceAttrPassCode")
     private String eserviceAttrPassCode;
 
-
-    @JsonProperty(value = "eserviceAttrPassCode")
-    private String eserviceAttrPassCode;
-
 }
