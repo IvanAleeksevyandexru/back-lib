@@ -25,21 +25,21 @@ public class HighloadParameters {
     private String orderType = "ORDER";
 
     private Long orderStatusId = 17L;
-    @JsonProperty(value = "eServiceFullName")
-    private String eServiceFullName;
-    @JsonProperty(value = "eServiceStateStructureId")
-    private String eServiceStateStructureId;
-    @JsonProperty(value = "eServiceStateStructureName")
-    private String eServiceStateStructureName;
-    @JsonProperty(value = "eServicePassportExtId")
-    private String eServicePassportExtId;
-    @JsonProperty(value = "eServiceAttrEpguCode")
-    private String eServiceAttrEpguCode;
+    @JsonProperty(value = "eserviceFullName")
+    private String eserviceFullName;
+    @JsonProperty(value = "eserviceStateStructureId")
+    private String eserviceStateStructureId;
+    @JsonProperty(value = "eserviceStateStructureName")
+    private String eserviceStateStructureName;
+    @JsonProperty(value = "eservicePassportExtId")
+    private String eservicePassportExtId;
+    @JsonProperty(value = "eserviceAttrEpguCode")
+    private String eserviceAttrEpguCode;
     @JsonProperty(value = "eserviceAttrServiceNameForOrder")
     private String eserviceAttrServiceNameForOrder;
     private Boolean eserviceAttrDeleteDraft = false;
     @JsonProperty(value = "eserviceAttrPassCode")
     private String eserviceAttrPassCode;
-
-
+    @JsonProperty(value = "eserviceStateOrgCode")
+    private String eserviceStateOrgCode;
 }
