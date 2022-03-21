@@ -155,13 +155,20 @@ public class FieldComponent {
     }
 
     @JsonIgnore
-    public boolean getBooleanAttr(String booleanAttrName) {
+    public boolean getBooleanAttr(String booleanAttrName, boolean defaultValue) {
+        if (attrs == null) return defaultValue;
         Object booleanAttrValue = this.attrs.get(booleanAttrName);
         if (Objects.nonNull(booleanAttrValue)) {
             if (booleanAttrValue instanceof Boolean) return (boolean) booleanAttrValue;
             return Boolean.parseBoolean(booleanAttrValue.toString());
         }
-        return false;
+        return defaultValue;
+    }
+
+    @JsonIgnore
+    public boolean getBooleanAttr(String booleanAttrName) {
+        return getBooleanAttr(booleanAttrName, false);
+
     }
 
     @JsonIgnore
