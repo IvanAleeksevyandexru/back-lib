@@ -134,6 +134,8 @@ public class RestTemplateCreator {
         List<HttpMessageConverter<?>> messageConverters = createMessageConverters(objectMapper);
 
         RestTemplate restTemplate = RestTemplateFactory.get(configPrefix, messageConverters);
+        RestTemplateNameHolder.registerRestTemplate(restTemplate, configPrefix);
+
         restTemplate.getInterceptors().add(createConfiguredRestHeadersInterceptor(env));
         restTemplate.getInterceptors().add(createConfiguredRemoteRestInterceptor(env));
         if (nonNull(handler)) {
