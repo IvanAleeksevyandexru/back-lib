@@ -54,19 +54,19 @@ public class DraftClientImplMockTest {
         Integer draftTtl = 91;
 
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://localhost:8072/internal/api/drafts/v3/117")))
+                requestTo(new URI("http://localhost:8072/internal/api/drafts/v4/117?type=1&ttlInSec=7862400&orderTtlInSec=7862400")))
                 .andExpect(method(HttpMethod.PUT))
                 .andExpect(MockRestRequestMatchers.header("token", userId + "@@@@1"))
-                .andExpect(content().json("{\"orderId\":" + orderId + ",\"body\":{\"serviceCode\":null,\"targetCode\":null,\"masterOrderId\":null,\"orderId\":" + orderId + ",\"currentScenarioId\":null,\"serviceId\":null,\"currentUrl\":null,\"finishedAndCurrentScreens\":[],\"cachedAnswers\":{},\"currentValue\":{},\"errors\":{},\"applicantAnswers\":{},\"cycledApplicantAnswers\":{\"currentAnswerId\":null,\"answerlist\":[]},\"participants\":{},\"display\":null,\"newContactId\":null,\"attachmentInfo\":{},\"additionalParameters\":{}},\"type\":\"" + serviceId + "\",\"locked\":false,\"updated\":null,\"ttlInSec\":" + (24 * 60 * 60 * draftTtl) + "}"))
+                .andExpect(content().json("{\"serviceCode\":null,\"targetCode\":null,\"masterOrderId\":null,\"orderId\":" + orderId + ",\"currentScenarioId\":null,\"serviceId\":null,\"currentUrl\":null,\"finishedAndCurrentScreens\":[],\"cachedAnswers\":{},\"currentValue\":{},\"errors\":{},\"applicantAnswers\":{},\"cycledApplicantAnswers\":{\"currentAnswerId\":null,\"answerlist\":[]},\"participants\":{},\"display\":null,\"newContactId\":null,\"attachmentInfo\":{},\"additionalParameters\":{}}"))
                 .andRespond(
                         withStatus(HttpStatus.OK)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .body("{\"orderId\":" + orderId + ", \"body\":{\"orderId\":" + orderId + "}}")
                 );
 
-        DraftHolderDto dto = apiClient.saveDraft(scenario, serviceId, userId, orgId, draftTtl, draftTtl);
-        Assert.assertEquals(dto.getOrderId(), orderId);
-        Assert.assertEquals(dto.getBody().getOrderId(), Long.valueOf(orderId));
+        apiClient.saveDraft(scenario, serviceId, userId, orgId, draftTtl, draftTtl);
+//        Assert.assertEquals(dto.getOrderId(), orderId);
+//        Assert.assertEquals(dto.getBody().getOrderId(), Long.valueOf(orderId));
 
         // Verify all expectations met
         mockServer.verify();
@@ -79,7 +79,7 @@ public class DraftClientImplMockTest {
         Long orgId = null;
 
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://localhost:8072/internal/api/drafts/v3/117")))
+                requestTo(new URI("http://localhost:8072/internal/api/drafts/v4/117")))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(MockRestRequestMatchers.header("token", userId + "@@@@1"))
                 .andRespond(
@@ -102,7 +102,7 @@ public class DraftClientImplMockTest {
         Long userId = 118L;
 
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://localhost:8072/internal/api/drafts/v3/117")))
+                requestTo(new URI("http://localhost:8072/internal/api/drafts/v4/117")))
                 .andExpect(method(HttpMethod.DELETE))
                 .andExpect(MockRestRequestMatchers.header("token", userId + "@@@@1"))
                 .andRespond(withStatus(HttpStatus.OK));

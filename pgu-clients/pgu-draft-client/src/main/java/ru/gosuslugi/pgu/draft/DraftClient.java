@@ -24,7 +24,7 @@ public interface DraftClient {
      * @param draftTtl - время храния черновиков (в сутках)
      * @return Черновик
      */
-    DraftHolderDto saveDraft(ScenarioDto scenario, String serviceId, Long userId, Long orgId, Integer draftTtl, Integer orderTtl);
+    void saveDraft(ScenarioDto scenario, String serviceId, Long userId, Long orgId, Integer draftTtl, Integer orderTtl);
 
     /**
      *
