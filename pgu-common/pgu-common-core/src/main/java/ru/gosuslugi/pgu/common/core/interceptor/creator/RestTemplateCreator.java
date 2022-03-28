@@ -45,7 +45,7 @@ public class RestTemplateCreator {
     /** Общее максимальное количество подключений по всем HTTP-роутам */
     private static final int MAX_TOTAL_CONNECTIONS = 10000;
     /** Максимальное количество подключений для каждого HTTP-роута в пуле */
-    private static final int MAX_ROUTE_CONNECTIONS = 1200;
+    private static final int MAX_ROUTE_CONNECTIONS = 3000;
 
     public static RestTemplate create(String configPrefix, ObjectMapper objectMapper, ConfigurableEnvironment env, RestTemplateCustomizer... customizers) {
         return create(configPrefix, objectMapper, env, null, customizers);
@@ -134,6 +134,8 @@ public class RestTemplateCreator {
         List<HttpMessageConverter<?>> messageConverters = createMessageConverters(objectMapper);
 
         RestTemplate restTemplate = RestTemplateFactory.get(configPrefix, messageConverters);
+        RestTemplateNameHolder.registerRestTemplate(restTemplate, configPrefix);
+
         restTemplate.getInterceptors().add(createConfiguredRestHeadersInterceptor(env));
         restTemplate.getInterceptors().add(createConfiguredRemoteRestInterceptor(env));
         if (nonNull(handler)) {
@@ -181,7 +183,7 @@ public class RestTemplateCreator {
      * Копирует параметры, начинающиеся с prefix, из application.yml в системные properties.
      * Это нужно, т.к. RestTemplateFactory берет их из System.getProperty()
      */
-    private static void copyApplicationPropertiesToSystem(ConfigurableEnvironment env, String prefix) {
+    public static void copyApplicationPropertiesToSystem(ConfigurableEnvironment env, String prefix) {
         env.getPropertySources().stream()
                 .filter(it -> it instanceof MapPropertySource && it.getName().contains("applicationConfig"))
                 .flatMap(it -> Stream.of(((MapPropertySource) it).getPropertyNames()))
