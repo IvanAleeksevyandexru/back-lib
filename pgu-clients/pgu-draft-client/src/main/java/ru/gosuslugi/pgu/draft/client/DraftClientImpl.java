@@ -20,6 +20,7 @@ import ru.gosuslugi.pgu.draft.model.DraftHolderDto;
 import ru.gosuslugi.pgu.dto.ScenarioDto;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -29,7 +30,11 @@ import static java.util.Objects.requireNonNull;
 @RequiredArgsConstructor
 public class DraftClientImpl implements DraftClient {
 
-    private final String MASTER_OID_ATTR_NAME = "masterOid";
+    private static final String GET_DRAFT_V4_URL = "/internal/api/drafts/v4/{orderId}";
+    private static final String DELETE_DRAFT_V4_URL = "/internal/api/drafts/v4/{orderId}";
+    private static final String SAVE_DRAFT_V4_URL = "/internal/api/drafts/v4/{orderId}?type={type}&ttlInSec={ttlInSec}&orderTtlInSec={orderTtlInSec}";
+    private static final String MASTER_OID_ATTR_NAME = "masterOid";
+
     private final RestTemplate restTemplate;
     private final DraftServiceProperties properties;
 
@@ -39,7 +44,7 @@ public class DraftClientImpl implements DraftClient {
         requireNonNull(userId, "userId is empty");
         try {
             ResponseEntity<DraftHolderDto> entity = restTemplate.exchange(
-                    properties.getUrl() + "/internal/api/drafts/v3/{id}",
+                    properties.getUrl() + GET_DRAFT_V4_URL,
                     HttpMethod.GET,
                     new HttpEntity<>(tokenToHeaders(userIdToToken(userId, orgId))),
                     DraftHolderDto.class,
@@ -60,25 +65,22 @@ public class DraftClientImpl implements DraftClient {
     }
 
     @Override
-    public DraftHolderDto saveDraft(ScenarioDto scenario, String serviceId, Long userId, Long orgId, Integer draftTtl, Integer orderTtl) {
+    public void saveDraft(ScenarioDto scenario, String serviceId, Long userId, Long orgId, Integer draftTtl, Integer orderTtl) {
         requireNonNull(scenario, "scenario is empty");
         requireNonNull(serviceId, "serviceId is empty");
 
-        DraftHolderDto saveDraftDto = new DraftHolderDto();
-        saveDraftDto.setOrderId(scenario.getOrderId());
-        saveDraftDto.setBody(scenario);
-        saveDraftDto.setType(serviceId);
-        saveDraftDto.setTtlInSec(Optional.ofNullable(draftTtl).map(DraftClientImpl::toSecondsFromDays).orElse(null));
-        saveDraftDto.setOrderTtlInSec(Optional.ofNullable(orderTtl).map(DraftClientImpl::toSecondsFromDays).orElse(null));
         try {
-            ResponseEntity<DraftHolderDto> entity = restTemplate.exchange(
-                    properties.getUrl() + "/internal/api/drafts/v3/{id}",
+            restTemplate.exchange(
+                    properties.getUrl() + SAVE_DRAFT_V4_URL,
                     HttpMethod.PUT,
-                    new HttpEntity<>(saveDraftDto, tokenToHeaders(userIdToToken(userId, orgId))),
-                    DraftHolderDto.class,
-                    scenario.getOrderId()
+                    new HttpEntity<>(scenario, tokenToHeaders(userIdToToken(userId, orgId))),
+                    Void.class,
+                    Map.of("orderId", scenario.getOrderId(),
+                            "type", serviceId,
+                            "ttlInSec", Optional.ofNullable(draftTtl).map(DraftClientImpl::toSecondsFromDays).orElse(""),
+                            "orderTtlInSec", Optional.ofNullable(orderTtl).map(DraftClientImpl::toSecondsFromDays).orElse("")
+                    )
             );
-            return entity.getBody();
         } catch (PguException e) {
             throw e;
         } catch (Exception e) {
@@ -87,8 +89,8 @@ public class DraftClientImpl implements DraftClient {
         }
     }
 
-    static int toSecondsFromDays(int days) {
-        return days * 24 * 60 * 60;
+    static String toSecondsFromDays(int days) {
+        return String.valueOf(days * 24 * 60 * 60);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class DraftClientImpl implements DraftClient {
         requireNonNull(userId, "userId is empty");
         try {
             restTemplate.exchange(
-                    properties.getUrl() + "/internal/api/drafts/v3/{id}",
+                    properties.getUrl() + DELETE_DRAFT_V4_URL,
                     HttpMethod.DELETE,
                     new HttpEntity<>(null, tokenToHeaders(userIdToToken(userId, null))),
                     Void.class,

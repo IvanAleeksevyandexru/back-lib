@@ -65,16 +65,8 @@ public class DraftClientStub implements DraftClient {
     }
 
     @Override
-    public DraftHolderDto saveDraft(ScenarioDto scenario, String serviceId, Long userId, Long orgId, Integer draftTtl, Integer orderTtl) {
+    public void saveDraft(ScenarioDto scenario, String serviceId, Long userId, Long orgId, Integer draftTtl, Integer orderTtl) {
         if(log.isDebugEnabled()) log.debug("saving draft to local storage for userId {} and serviceId {} with orderId {}", userId, serviceId, scenario.getOrderId());
-        DraftHolderDto draft = new DraftHolderDto();
-        draft.setOrderId(scenario.getOrderId());
-        draft.setOrgId(orgId);
-        draft.setBody(scenario);
-        draft.setLocked(false);
-        draft.setType(serviceId);
-        draft.setOrderTtlInSec(orderTtl);
-        return draft;
     }
 
     @Override
