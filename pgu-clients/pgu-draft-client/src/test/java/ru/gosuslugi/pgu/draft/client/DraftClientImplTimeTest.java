@@ -8,7 +8,7 @@ public class DraftClientImplTimeTest {
 
     @Test
     public void toSecondsFromDays() {
-        assertEquals(24 * 60 * 60, DraftClientImpl.toSecondsFromDays(1));
-        assertEquals(7776000, DraftClientImpl.toSecondsFromDays(90));
+        assertEquals(String.valueOf(24 * 60 * 60), DraftClientImpl.toSecondsFromDays(1));
+        assertEquals("7776000", DraftClientImpl.toSecondsFromDays(90));
     }
 }
