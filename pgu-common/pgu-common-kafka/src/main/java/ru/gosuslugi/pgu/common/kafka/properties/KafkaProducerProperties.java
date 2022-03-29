@@ -3,15 +3,12 @@ package ru.gosuslugi.pgu.common.kafka.properties;
 import lombok.Data;
 import org.apache.kafka.clients.admin.NewTopic;
 
-import javax.validation.constraints.NotEmpty;
-
 /**
  * Поля конфигурация для отправки kafka сообщений
  */
 @Data
 public class KafkaProducerProperties {
 
-    @NotEmpty
     private String topic;
 
     /**

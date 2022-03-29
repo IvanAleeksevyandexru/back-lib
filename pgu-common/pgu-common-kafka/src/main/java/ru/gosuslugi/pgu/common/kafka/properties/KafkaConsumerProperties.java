@@ -37,12 +37,6 @@ public class KafkaConsumerProperties {
 
     private Integer concurrency = 1;
 
-    private String threadPrefixName = "kafka-consumer";
-
-    private int processingThreads = 1;
-
-    private boolean batchProcessing = false;
-
-    private long executeThreadWaitTimeSec = 600;
+    private boolean batchProcessing = true;
 
 }
