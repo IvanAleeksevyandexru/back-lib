@@ -76,6 +76,7 @@ public class ServiceDescriptor {
     private Map<String, List<TransformationRule>> statusTransformationRules;
 
     private List<TransformationBlock> transformation;
+    private List<String> saveDraftsAtScreens = new ArrayList<>();
 
     /**
      * Список ролей заявления с указанием ID-полей с подсказками
@@ -215,6 +216,7 @@ public class ServiceDescriptor {
                 .answerServicePrefix(descriptor.answerServicePrefix)
                 .parameters(descriptor.parameters)
                 .availableOrderStatuses(descriptor.availableOrderStatuses)
+                .saveDraftsAtScreens(descriptor.saveDraftsAtScreens)
                 .build();
     }
 }
