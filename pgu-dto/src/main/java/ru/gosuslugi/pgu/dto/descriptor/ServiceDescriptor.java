@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceDescriptor {
-    public static final List<Long> DEFAULT_AVAILABLE_ORDER_STATUSES = Arrays.asList(0L, 14L, 15L, 25L);
+    public static final List<Long> DEFAULT_AVAILABLE_ORDER_STATUSES = Arrays.asList(0L, 14L, 15L, 25L, 91L, 93L);
     public static final String CLARIFICATIONS_ATTR = "clarifications";
     public static final String EMPOWERMENT_ID_PARAM = "empowerment";
 
@@ -76,6 +76,7 @@ public class ServiceDescriptor {
     private Map<String, List<TransformationRule>> statusTransformationRules;
 
     private List<TransformationBlock> transformation;
+    private List<String> saveDraftsAtScreens = new ArrayList<>();
 
     /**
      * Список ролей заявления с указанием ID-полей с подсказками
@@ -215,6 +216,7 @@ public class ServiceDescriptor {
                 .answerServicePrefix(descriptor.answerServicePrefix)
                 .parameters(descriptor.parameters)
                 .availableOrderStatuses(descriptor.availableOrderStatuses)
+                .saveDraftsAtScreens(descriptor.saveDraftsAtScreens)
                 .analyticsTags(descriptor.analyticsTags)
                 .build();
     }

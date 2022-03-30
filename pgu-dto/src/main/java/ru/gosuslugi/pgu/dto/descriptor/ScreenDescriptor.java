@@ -12,10 +12,7 @@ import ru.gosuslugi.pgu.dto.descriptor.types.ScreenButton;
 import ru.gosuslugi.pgu.dto.descriptor.types.ScreenType;
 import ru.gosuslugi.pgu.dto.descriptor.types.SubHeader;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class describing screen to be displayed
@@ -136,6 +133,7 @@ public class ScreenDescriptor {
      * Mapping instructions for component arguments
      */
     private List<LinkedValue> linkedValues;
+
 
     @JsonIgnore
     public ScreenDescriptor getCopy() {
