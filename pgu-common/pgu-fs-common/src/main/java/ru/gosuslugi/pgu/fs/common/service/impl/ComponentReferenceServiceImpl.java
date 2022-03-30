@@ -273,11 +273,12 @@ public class ComponentReferenceServiceImpl implements ComponentReferenceService 
                 for(CycledApplicantAnswerItem cycledApplicantAnswerItem : cycledApplicantAnswerItems) {
                     var answersMap = cycledApplicantAnswerItem.getItemAnswers();
                     DocumentContext cycledApplicationContext = JsonPath.parse(jsonProcessingService.convertAnswersToJsonString(answersMap));
-
+                    jsonProcessingService.releaseThreadCache();
                     // обработка и добавление новой группы полей
                     linkedValuesService.fillLinkedValues(component, scenarioDto, cycledApplicationContext);
                     PlaceholderContext context = buildPlaceholderContext(attrsFactory, component, scenarioDto);
                     getStateDto(context, fg, cycledApplicationContext).ifPresent(formDtoBuilder::state);
+
                 }
             } else {
                 // обработка и добавление новой группы полей (нецикличные ответы)
@@ -340,6 +341,7 @@ public class ComponentReferenceServiceImpl implements ComponentReferenceService 
         for(var answersMap : answers) {
             DocumentContext answerContext = JsonPath.parse(jsonProcessingService.convertAnswersToJsonString(answersMap));
             result = getValueByContext(result, Function.identity(), context, answerContext);
+            jsonProcessingService.releaseThreadCache();
         }
         return result;
     }

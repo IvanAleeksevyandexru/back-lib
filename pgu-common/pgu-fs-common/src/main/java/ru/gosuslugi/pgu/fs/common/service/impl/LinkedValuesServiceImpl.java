@@ -271,7 +271,7 @@ public class LinkedValuesServiceImpl implements LinkedValuesService {
             Stream.of(externalContexts).forEach(documentContexts::add);
             documentContexts.add(JsonPath.parse(jsonProcessingService.convertAnswersToJsonString(scenarioDto.getCurrentValue())));
             documentContexts.add(JsonPath.parse(jsonProcessingService.convertAnswersToJsonString(scenarioDto.getApplicantAnswers())));
-
+            jsonProcessingService.releaseThreadCache();
             Reference reference = new Reference();
             reference.setPath(cycledAttrs.getCycledAnswerIndex());
             String indexValue = reference.getNext(documentContexts.toArray(new DocumentContext[] {}));
