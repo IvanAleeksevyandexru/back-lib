@@ -1,11 +1,16 @@
 package ru.gosuslugi.pgu.fs.common.service.impl;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.PathNotFoundException;
+import org.apache.commons.lang.SerializationUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +38,11 @@ import static java.util.Objects.isNull;
 public class JsonProcessingServiceImpl implements JsonProcessingService {
 
     private final ObjectMapper objectMapper;
+
+    private final ThreadLocal<Map<String, JsonNode>> th = new ThreadLocal<>();
+
+    @Value("${data.cache.enabled}")
+    private boolean enableDataCache = false;
 
     @Override
     public String toJson(Object o) {
@@ -106,6 +116,18 @@ public class JsonProcessingServiceImpl implements JsonProcessingService {
     public String convertAnswersToJsonString(Map<String, ApplicantAnswer> answerMap) {
         ObjectNode root = objectMapper.createObjectNode();
         for (Map.Entry<String, ApplicantAnswer> answerEntry : answerMap.entrySet()) {
+
+            if(Objects.isNull(th.get())){
+                th.set(new HashMap<>());
+            }
+
+            var cache = th.get();
+            if(enableDataCache){
+                if(Objects.nonNull(cache.get(answerEntry.getKey()))){
+                    root.set(answerEntry.getKey(), cache.get(answerEntry.getKey()));
+                    continue;
+                }
+            }
             ApplicantAnswer answer = answerEntry.getValue();
             ObjectNode answerNode = objectMapper.createObjectNode();
             answerNode.put("visited", answer.getVisited());
@@ -141,8 +163,17 @@ public class JsonProcessingServiceImpl implements JsonProcessingService {
             }
 
             root.set(answerEntry.getKey(), answerNode);
+            if(enableDataCache){
+                cache.put(answerEntry.getKey(), answerNode);
+            }
+
         }
         return root.toString();
+    }
+
+    @Override
+    public void releaseThreadCache(){
+        th.remove();
     }
 
     @Override
