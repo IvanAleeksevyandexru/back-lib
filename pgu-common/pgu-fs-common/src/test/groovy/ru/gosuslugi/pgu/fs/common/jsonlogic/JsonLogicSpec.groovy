@@ -16,9 +16,10 @@ import spock.lang.Specification
 class JsonLogicSpec extends Specification {
 
     static JsonLogic jsonLogic
+    static JsonProcessingServiceImpl jsonProcessingServiceImpl;
 
     def setupSpec() {
-        def jsonProcessingService = new JsonProcessingServiceImpl(JsonProcessingUtil.getObjectMapper())
+        jsonProcessingServiceImpl = new JsonProcessingServiceImpl(JsonProcessingUtil.getObjectMapper())
         def protectedFieldService = Mock(ProtectedFieldService)
         def variableRegistry = new VariableRegistry()
         def conditionCheckerHelper = new ConditionCheckerHelper(
@@ -34,7 +35,7 @@ class JsonLogicSpec extends Specification {
         jsonLogic = new JsonLogic(new Parser(
                 protectedFieldService,
                 variableRegistry,
-                jsonProcessingService,
+                jsonProcessingServiceImpl,
                 conditionCheckerHelper))
     }
 }

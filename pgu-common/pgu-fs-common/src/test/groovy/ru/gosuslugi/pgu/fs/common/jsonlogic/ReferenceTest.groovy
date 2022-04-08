@@ -14,6 +14,7 @@ class ReferenceTest extends JsonLogicSpec {
         Object result = jsonLogic.calculate(json, scenarioDto)
         then:
         result == expectedResult
+        jsonProcessingServiceImpl.releaseThreadCache()
         where:
         value | expectedResult
         "0"   | 'ноль'
@@ -30,6 +31,7 @@ class ReferenceTest extends JsonLogicSpec {
         Object result = jsonLogic.calculate(json, scenarioDto)
         then:
         result == expectedResult
+        jsonProcessingServiceImpl.releaseThreadCache()
         where:
         value | expectedResult
         "0"   | 'много'
@@ -46,6 +48,7 @@ class ReferenceTest extends JsonLogicSpec {
         Object result = jsonLogic.calculate(json, scenarioDto)
         then:
         result == expectedResult
+        jsonProcessingServiceImpl.releaseThreadCache()
         where:
         value | expectedResult
         '{\\"field1\\":\\"value1\\",\\"field2\\":\\"value2\\"}'   | '{\\"field1\\":\\"value1\\",\\"field2\\":\\"value2\\"}'

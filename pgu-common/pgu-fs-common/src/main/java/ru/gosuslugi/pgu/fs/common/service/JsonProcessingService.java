@@ -26,6 +26,8 @@ public interface JsonProcessingService {
 
     <T> T getFieldFromContext(String field, DocumentContext documentContext, Class<T> aClass);
 
+    void releaseThreadCache();
+
     String componentDtoToString(ComponentResponse<?> componentResponse);
 
     <T> T fromResource(Resource resource, Class<T> clazz);
