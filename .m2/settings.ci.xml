@@ -11,6 +11,8 @@
   <servers>
     <server>
       <id>nexus</id>
+      <username>${repo.login}</username>
+      <password>${repo.pwd}</password>
     </server>
   </servers>
 
