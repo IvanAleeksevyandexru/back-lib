@@ -27,7 +27,6 @@ public enum ComponentType {
     RadioButtonInput,
 
     ChildrenList,
-    ConfirmAddress,
     RegistrationAddr,
     RegistrationLegalAddr,
     RegistrationLegalAddrReadOnly,
