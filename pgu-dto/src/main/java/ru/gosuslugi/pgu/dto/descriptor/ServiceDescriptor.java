@@ -20,6 +20,9 @@ import ru.gosuslugi.pgu.dto.descriptor.value.target.TargetIds;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * https://jira.egovdev.ru/browse/EPGUCORE-90939 - закрытие услуги кукой через JSON, атрибут closedByCookie
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @Builder
@@ -56,6 +59,7 @@ public class ServiceDescriptor {
     private String init;
     private Integer draftTtl;
     private Integer orderTtl;
+    private Boolean closedByCookie = false;
     /**
      * В ряде услуг, черновики для которых создают внешние системы,
      * не должно предлагаться возможность начинать проходить услугу заново.
@@ -218,6 +222,7 @@ public class ServiceDescriptor {
                 .availableOrderStatuses(descriptor.availableOrderStatuses)
                 .saveDraftsAtScreens(descriptor.saveDraftsAtScreens)
                 .analyticsTags(descriptor.analyticsTags)
+                .closedByCookie(descriptor.closedByCookie)
                 .build();
     }
 }
