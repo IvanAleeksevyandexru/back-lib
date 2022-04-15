@@ -33,4 +33,7 @@ public class OrderListInfoDto {
 
     @Schema(description = "Название услуги из Service Descriptor")
     private String serviceName;
+
+    @Schema(description = "Флаг, указывающий на то, что услуга закрыта кукой")
+    private Boolean closedByCookie = false;
 }
