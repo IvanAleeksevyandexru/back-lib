@@ -21,6 +21,8 @@ public class KafkaConsumerProperties {
 
     private String groupId = "0";
 
+    private String retryTopic;
+
     /**
      * Maximum number of records returned in a single call to poll().
      */

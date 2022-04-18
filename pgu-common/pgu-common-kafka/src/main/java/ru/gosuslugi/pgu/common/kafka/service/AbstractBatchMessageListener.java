@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.listener.BatchMessageListener;
 import org.springframework.util.StopWatch;
 import ru.atc.carcass.common.exception.FaultException;
+import ru.gosuslugi.pgu.common.core.exception.RetryKafkaException;
 import ru.gosuslugi.pgu.common.kafka.properties.KafkaConsumerProperties;
 import ru.gosuslugi.pgu.common.logging.service.SpanService;
 
@@ -27,17 +28,19 @@ import static ru.gosuslugi.pgu.common.kafka.util.KafkaTraceUtils.runInSpan;
 public abstract class AbstractBatchMessageListener<K, V> implements BatchMessageListener<K, V> {
 
     protected final KafkaConsumerProperties consumerProperties;
+    protected final KafkaRetryService kafkaRetryService;
     protected final SpanService spanService;
     protected BiConsumer<V, String> onErrorCallback;
 
     private final ExecutorService executorService;
 
-    protected AbstractBatchMessageListener(KafkaConsumerProperties consumerProperties, SpanService spanService) {
+    protected AbstractBatchMessageListener(KafkaConsumerProperties consumerProperties, KafkaRetryService kafkaRetryService, SpanService spanService) {
         var threadFactory = new BasicThreadFactory.Builder()
                 .namingPattern(consumerProperties.getThreadPrefixName() + "-%d")
                 .build();
         this.executorService = Executors.newFixedThreadPool(consumerProperties.getProcessingThreads(), threadFactory);
         this.consumerProperties = consumerProperties;
+        this.kafkaRetryService = kafkaRetryService;
         this.spanService = spanService;
     }
 
@@ -83,6 +86,16 @@ public abstract class AbstractBatchMessageListener<K, V> implements BatchMessage
                 futures.get(i).get();
             } catch (Exception e) {
                 ConsumerRecord<K, V> unprocessedMessage = messages.get(i);
+                if (e.getCause() instanceof RetryKafkaException) {
+                    runInSpan(spanService, "kafka-process-retry", unprocessedMessage.headers(),
+                            () -> {
+                                log.error("Error on processing kafka message. Send to retry topic. {}", e.getCause().getMessage(), e);
+                                kafkaRetryService.pushToRetryTopic(consumerProperties, unprocessedMessage,
+                                        () -> onErrorCallback.accept(unprocessedMessage.value(), e.getCause().getMessage()));
+                            }
+                    );
+                    return;
+                }
                 runInSpan(spanService, "kafka-process-error", unprocessedMessage.headers(),
                         () -> {
                             String errorMsg = String.format("Unprocessed kafka message: %s; Reason: %s", unprocessedMessage.value(), e.getMessage());
