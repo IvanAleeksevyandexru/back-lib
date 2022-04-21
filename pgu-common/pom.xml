@@ -22,15 +22,9 @@
 
     <modules>
         <module>pgu-common-core</module>
-        <module>pgu-common-nsi</module>
-        <module>pgu-common-sop</module>
         <module>pgu-common-logging</module>
-        <module>pgu-common-gibdd</module>
         <module>pgu-common-person-search</module>
-        <module>pgu-common-payment</module>
         <module>pgu-common-attachments</module>
-        <module>pgu-common-eaisdo</module>
-        <module>pgu-common-certificate</module>
         <module>pgu-common-starter-tracing</module>
         <module>pgu-common-kafka</module>
         <module>pgu-common-rendering</module>

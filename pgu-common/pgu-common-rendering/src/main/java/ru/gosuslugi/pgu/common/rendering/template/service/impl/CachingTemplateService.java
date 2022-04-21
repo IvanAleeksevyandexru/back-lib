@@ -1,8 +1,13 @@
 package ru.gosuslugi.pgu.common.rendering.template.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import ru.gosuslugi.pgu.common.rendering.template.config.props.TemplateServiceProperties;
 import ru.gosuslugi.pgu.common.rendering.template.data.PackageProcessingStatus;
 import ru.gosuslugi.pgu.common.rendering.template.data.ProcessingStatus;
-import ru.gosuslugi.pgu.common.rendering.template.config.props.TemplateServiceProperties;
 import ru.gosuslugi.pgu.common.rendering.template.exception.TemplateServiceException;
 import ru.gosuslugi.pgu.common.rendering.template.service.TemplateService;
 import ru.gosuslugi.pgu.sd.storage.ServiceDescriptorClient;
@@ -25,12 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import javax.xml.bind.DatatypeConverter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
 /**
  * Управляет блокировкой на архив с файлами шаблонов, загружая их из дескриптора услуг в локальное
@@ -202,7 +201,7 @@ public class CachingTemplateService implements TemplateService {
         byte[] digest = md.digest();
         FileWriter fileWriter = new FileWriter(
                 destDir.getAbsolutePath() + File.separator + serviceId + CHECKSUM_FILE_SUFFIX);
-        String checksum = DatatypeConverter.printHexBinary(digest).toUpperCase();
+        String checksum = printHexBinary(digest);
         fileWriter.write(checksum);
         fileWriter.close();
     }
@@ -218,4 +217,17 @@ public class CachingTemplateService implements TemplateService {
         }
         return destFile;
     }
+
+    private static final char[] HEX_CHARS = "0123456789ABCDEF".toCharArray();
+
+    public static String printHexBinary(byte[] data) {
+        final var sb = new StringBuilder();
+        for (int i = 0; i < data.length; i++) {
+            final var b = data[i];
+            sb.append(HEX_CHARS[b >> 4 & 15]);
+            sb.append(HEX_CHARS[b & 15]);
+        }
+        return sb.toString();
+    }
+
 }
